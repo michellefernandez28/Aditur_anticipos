@@ -1,4 +1,41 @@
-/build/
-/dist/
-/nbproject/private/
-/*.class
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+
+# Gradle
+.gradle/
+build/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+#neatbeans
+dist/
+nbproject/private/
+nbproject/private/private.properties
+nbproject/private/private.xml
+nbproject/private/config.properties
+nbproject/private/configs/
