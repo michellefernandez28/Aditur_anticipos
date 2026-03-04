@@ -9,7 +9,7 @@ package ingles;
  * @author miche
  */
 public class ListaTour extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaTour.class.getName());
 
     /**
@@ -215,6 +215,7 @@ public class ListaTour extends javax.swing.JFrame {
 
     private void btnAgregarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarViajeActionPerformed
         // TODO add your handling code here:
+        //test comment
     }//GEN-LAST:event_btnAgregarViajeActionPerformed
 
     /**
