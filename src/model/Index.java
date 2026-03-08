@@ -14,7 +14,8 @@ public class Index {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        ListaTour frame = new ListaTour();
+        frame.setVisible(true);
     }
-    
+
 }

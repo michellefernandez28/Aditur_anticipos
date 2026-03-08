@@ -17,6 +17,7 @@ public class ListaTour extends javax.swing.JFrame {
      */
     public ListaTour() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
