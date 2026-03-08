@@ -9,7 +9,7 @@ package model;
  * @author miche
  */
 public class agregarPersona extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(agregarPersona.class.getName());
 
     /**
@@ -17,6 +17,7 @@ public class agregarPersona extends javax.swing.JFrame {
      */
     public agregarPersona() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**

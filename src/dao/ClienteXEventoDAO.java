@@ -69,6 +69,44 @@ public class ClienteXEventoDAO {
         return lista;
     }
 
+    public static void eliminar(int cedula, int idEvento) throws IOException {
+        List<String> lineas = CSVUtility.leerLineas(Constantes.ARCHIVO_CLIENTE_EVENTO);
+
+        List<String> nuevasLineas = new ArrayList<>();
+
+        nuevasLineas.add(lineas.get(0));
+
+        for (int i = 1; i < lineas.size(); i++) {
+            Cliente_X_Evento c = Cliente_X_Evento.fromCSV(lineas.get(i));
+            if (!(c.getCedula() == cedula && c.getId_evento() == idEvento)) {
+                nuevasLineas.add(lineas.get(i));
+            }
+
+        }
+
+        CSVUtility.sobrescribirArchivo(Constantes.ARCHIVO_CLIENTE_EVENTO, nuevasLineas);
+    }
+
+    public static void actualizar(Cliente_X_Evento actualizado) throws IOException {
+
+        List<String> lineas = CSVUtility.leerLineas(Constantes.ARCHIVO_CLIENTE_EVENTO);
+        List<String> nuevasLineas = new ArrayList<>();
+
+        nuevasLineas.add(lineas.get(0));
+
+        for (int i = 1; i < lineas.size(); i++) {
+            Cliente_X_Evento c = Cliente_X_Evento.fromCSV(lineas.get(i));
+            if (c.getCedula() == actualizado.getCedula() && c.getId_evento() == actualizado.getId_evento()) {
+                nuevasLineas.add(actualizado.toCSV());
+            } else {
+                nuevasLineas.add(lineas.get(i));
+            }
+
+        }
+
+        CSVUtility.sobrescribirArchivo(Constantes.ARCHIVO_CLIENTE_EVENTO, nuevasLineas);
+    }
+
     public static List<Cliente_X_Evento> buscarPorCedula(int cedula) throws IOException {
         List<Cliente_X_Evento> resultado = new ArrayList<>();
         List<Cliente_X_Evento> lista = listar();

@@ -27,12 +27,12 @@ public class Cliente_X_Evento {
 
     }
 
-    // Convertir objeto a CSV
+    // Convertir objeto a CSV (línea de texto)
     public String toCSV() {
         return cedula + SEP + id_evento + SEP + cant_personas + SEP + grupo + SEP + detalles.replace(SEP, ",");
     }
 
-    // Convertir CSV a objeto
+    // Convertir CSV (linea de texto) a objeto
     public static Cliente_X_Evento fromCSV(String linea) {
         //Separa por SEP ";" sin eliminar campos vacíos al final.
         String[] datos = linea.split(SEP, -1);

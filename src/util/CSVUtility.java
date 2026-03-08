@@ -46,6 +46,17 @@ public class CSVUtility {
 
     }
 
+    public static void sobrescribirArchivo(String archivo, List<String> lineas) throws IOException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, false))) {
+
+            for (String linea : lineas) {
+                bw.write(linea);
+                bw.newLine();
+            }
+
+        }
+    }
+
     public static void asegurarArchivo(String ruta, String header) throws IOException {
 
         File archivo = new File(ruta);
