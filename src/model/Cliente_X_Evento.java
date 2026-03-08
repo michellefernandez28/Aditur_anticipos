@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ingles;
+package model;
+
+import static util.Constantes.SEP;
 
 /**
  *
@@ -11,18 +13,39 @@ package ingles;
 public class Cliente_X_Evento {
 
     private int cedula, id_evento, cant_personas;
-    private String grupo, detalle;
+    private String grupo, detalles;
 
-    public Cliente_X_Evento(int cedula, int id_evento, int cant_personas, String grupo, String detalle) {
+    public Cliente_X_Evento(int cedula, int id_evento, int cant_personas, String grupo, String detalles) {
         this.cedula = cedula;
         this.id_evento = id_evento;
         this.cant_personas = cant_personas;
         this.grupo = grupo;
-        this.detalle = detalle;
+        this.detalles = detalles;
     }
 
     public Cliente_X_Evento() {
 
+    }
+
+    // Convertir objeto a CSV
+    public String toCSV() {
+        return cedula + SEP + id_evento + SEP + cant_personas + SEP + grupo + SEP + detalles.replace(SEP, ",");
+    }
+
+    // Convertir CSV a objeto
+    public static Cliente_X_Evento fromCSV(String linea) {
+        //Separa por SEP ";" sin eliminar campos vacíos al final.
+        String[] datos = linea.split(SEP, -1);
+        if (datos.length != 5) {
+            throw new IllegalArgumentException("Formato CSV inválido: " + linea);
+        }
+        return new Cliente_X_Evento(
+                Integer.parseInt(datos[0]),
+                Integer.parseInt(datos[1]),
+                Integer.parseInt(datos[2]),
+                datos[3],
+                datos[4]
+        );
     }
 
     public int getCedula() {
@@ -57,12 +80,12 @@ public class Cliente_X_Evento {
         this.grupo = grupo;
     }
 
-    public String getDetalle() {
-        return detalle;
+    public String getDetalles() {
+        return detalles;
     }
 
-    public void setDetalle(String detalle) {
-        this.detalle = detalle;
+    public void setDetalles(String detalles) {
+        this.detalles = detalles;
     }
 
 }
