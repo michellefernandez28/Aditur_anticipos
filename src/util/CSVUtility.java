@@ -57,7 +57,7 @@ public class CSVUtility {
         }
     }
 
-    public static void asegurarArchivo(String ruta, String header) throws IOException {
+    public static void crearArchivo(String ruta, String header) throws IOException {
 
         File archivo = new File(ruta);
 

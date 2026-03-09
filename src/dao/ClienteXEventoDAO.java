@@ -20,7 +20,7 @@ public class ClienteXEventoDAO {
 
     public static void inicializarArchivo() throws IOException {
 
-        CSVUtility.asegurarArchivo(
+        CSVUtility.crearArchivo(
                 Constantes.ARCHIVO_CLIENTE_EVENTO,
                 "cedula" + SEP + "id_Evento" + SEP + "grupo" + SEP + "cant_personas" + SEP + "detalles"
         );
