@@ -40,7 +40,7 @@ public class CSVUtility {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))) {
 
             bw.write(linea);
-            bw.newLine();
+            bw.newLine();//
 
         }
 
