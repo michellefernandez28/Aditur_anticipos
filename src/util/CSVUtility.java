@@ -31,7 +31,7 @@ public class CSVUtility {
                 lineas.add(linea);
             }
         }
-
+        System.out.println(lineas);
         return lineas;
     }
 

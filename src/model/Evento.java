@@ -5,19 +5,20 @@
 package model;
 
 import java.time.LocalDate;
+import static util.Constantes.SEP;
 
 /**
  *
  * @author miche
  */
 public class Evento {
-    
+
     private int idEvento, cantDias, cantidadParticipantes;
     private String nombre, detalles;
     private EstadoEvento estado;
     private java.time.LocalDate fecha;
     private double montoPersona;
-    
+
     public enum EstadoEvento {
         Programado, Activo, Finalizado, Cancelado
     }
@@ -34,6 +35,32 @@ public class Evento {
         this.estado = estado;
         this.fecha = fecha;
         this.montoPersona = montoPersona;
+    }
+
+    // Convertir objeto a CSV (línea de texto)
+    public String toCSV() {
+        return idEvento + SEP + cantDias + SEP + cantidadParticipantes + SEP
+                + nombre + SEP + detalles.replace(SEP, ",") + SEP
+                + estado + SEP + fecha + SEP + montoPersona;
+    }
+
+    // Convertir CSV (linea de texto) a objeto
+    public static Evento fromCSV(String linea) {
+        //Separa por SEP ";" sin eliminar campos vacíos al final.
+        String[] datos = linea.split(SEP, -1);
+        if (datos.length != 8) {
+            throw new IllegalArgumentException("Formato CSV inválido: " + linea);
+        }
+        return new Evento(
+                Integer.parseInt(datos[0]),
+                Integer.parseInt(datos[1]),
+                Integer.parseInt(datos[2]),
+                datos[3],
+                datos[4],
+                EstadoEvento.valueOf(datos[5]),
+                java.time.LocalDate.parse(datos[6]),
+                Double.parseDouble(datos[7])
+        );
     }
 
     public int getIdEvento() {
@@ -99,6 +126,5 @@ public class Evento {
     public void setMontoPersona(double montoPersona) {
         this.montoPersona = montoPersona;
     }
-    
-    
+
 }

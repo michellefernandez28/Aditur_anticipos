@@ -15,7 +15,7 @@ public class listaXtour extends javax.swing.JFrame {
     /**
      * Creates new form listaXtour
      */
-    public listaXtour() {
+    public listaXtour(Evento e, int fila) {
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -239,7 +239,7 @@ public class listaXtour extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new listaXtour().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new listaXtour(null, 0).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

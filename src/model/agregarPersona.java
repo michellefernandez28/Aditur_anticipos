@@ -240,8 +240,8 @@ public class agregarPersona extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-       dispose();
-        listaXtour listaxtour = new listaXtour();
+        dispose();
+        listaXtour listaxtour = new listaXtour(null, 0);
         listaxtour.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 

@@ -9,7 +9,7 @@ package model;
  * @author miche
  */
 public class inicioSesion extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(inicioSesion.class.getName());
 
     /**
@@ -17,6 +17,7 @@ public class inicioSesion extends javax.swing.JFrame {
      */
     public inicioSesion() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
