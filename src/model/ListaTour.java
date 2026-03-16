@@ -46,9 +46,9 @@ public class ListaTour extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
+        btnEliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaViajes = new javax.swing.JTable();
-        btnEliminar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -72,6 +72,14 @@ public class ListaTour extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 570, 90, -1));
+
         tablaViajes.setBackground(new java.awt.Color(255, 255, 255));
         tablaViajes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -83,22 +91,26 @@ public class ListaTour extends javax.swing.JFrame {
             new String [] {
                 "ID", "Nombre", "Fecha", "Capacidad", "Costo", "Tiquetes Vendidos", "Cant. Días", "Detalles"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaViajes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tablaViajes.getTableHeader().setReorderingAllowed(false);
         tablaViajes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablaViajesMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tablaViajes);
+        tablaViajes.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 760, 460));
-
-        btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
-        btnEliminar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
-        btnEliminar.setText("Eliminar");
-        btnEliminar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 740, 90, -1));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 760, 440));
 
         jLabel6.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
@@ -266,7 +278,11 @@ public class ListaTour extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablaViajesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaViajesMouseClicked
-        EventPressed();
+        int fila = tablaViajes.rowAtPoint(evt.getPoint());
+
+        if (fila != -1 && evt.getClickCount() == 2) {
+            EventPressed();
+        }
     }//GEN-LAST:event_tablaViajesMouseClicked
 
     private void btnAgregarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarViajeActionPerformed
@@ -277,10 +293,10 @@ public class ListaTour extends javax.swing.JFrame {
         int idEvento, capacidad, cantDias;
         double costo;
         try {
-//            String dia = Integer.toString(dtFecha.getCalendar().get(Calendar.DAY_OF_MONTH));
-//            String mes = Integer.toString(dtFecha.getCalendar().get(Calendar.MONTH) + 1);
-//            String anio = Integer.toString(dtFecha.getCalendar().get(Calendar.YEAR));
-//            fecha = (dia + "/" + mes + "/" + anio);
+            //            String dia = Integer.toString(dtFecha.getCalendar().get(Calendar.DAY_OF_MONTH));
+            //            String mes = Integer.toString(dtFecha.getCalendar().get(Calendar.MONTH) + 1);
+            //            String anio = Integer.toString(dtFecha.getCalendar().get(Calendar.YEAR));
+            //            fecha = (dia + "/" + mes + "/" + anio);
             nombre = txtNombre.getText();
             fecha = dtFecha.getDate().toInstant()
                     .atZone(java.time.ZoneId.systemDefault())
@@ -322,6 +338,46 @@ public class ListaTour extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAgregarViajeActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        int fila = tablaViajes.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un evento");
+            return;
+        }
+        int idEvento = Integer.parseInt(tablaViajes.getValueAt(fila, 0).toString());
+        try {
+
+            String nombre = tablaViajes.getValueAt(fila, 1).toString();
+
+            int confirmacion = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Está seguro de eliminar el evento " + idEvento + " - " + nombre + "?",
+                    "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+
+                EventoDAO.eliminar(idEvento);
+
+                Eventos.removeIf(e -> e.getIdEvento() == idEvento);
+
+                VerDatos();
+
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar");
+            StringBuilder sb = new StringBuilder("Se ha producido una excepción:\n");
+            for (StackTraceElement element : e.getStackTrace()) {
+                sb.append(element.toString()).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     private void Cargar() {
         try {
             Eventos = (ArrayList<Evento>) EventoDAO.listar();
@@ -359,7 +415,12 @@ public class ListaTour extends javax.swing.JFrame {
                     "ID", "Nombre", "Fecha", "Capacidad", "Costo",
                     "Tiquetes Vendidos", "Cant. Días", "Detalles"
                 }
-        ));
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
     }
 
     public void EventPressed() {

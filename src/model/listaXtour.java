@@ -45,9 +45,10 @@ public class listaXtour extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        listadopasajeros = new javax.swing.JLabel();
-        lbleclipse = new javax.swing.JLabel();
+        lbEvento = new javax.swing.JLabel();
         lb1 = new javax.swing.JLabel();
+        listadopasajeros1 = new javax.swing.JLabel();
+        lbleclipse = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -110,6 +111,7 @@ public class listaXtour extends javax.swing.JFrame {
         jComboBox1.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Evento" }));
+        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
         jPanel4.add(jComboBox1);
 
         btnVolver.setBackground(new java.awt.Color(255, 255, 255));
@@ -166,18 +168,25 @@ public class listaXtour extends javax.swing.JFrame {
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 570, 410, 40));
 
-        listadopasajeros.setBackground(new java.awt.Color(0, 0, 0));
-        listadopasajeros.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
-        listadopasajeros.setForeground(new java.awt.Color(0, 0, 0));
-        listadopasajeros.setText("Listado de pasajeros");
-        listadopasajeros.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel1.add(listadopasajeros, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 70, -1, -1));
-
-        lbleclipse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
-        jPanel1.add(lbleclipse, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 730));
+        lbEvento.setBackground(new java.awt.Color(0, 0, 0));
+        lbEvento.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        lbEvento.setForeground(new java.awt.Color(0, 0, 0));
+        lbEvento.setText(".");
+        lbEvento.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel1.add(lbEvento, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 100, -1, -1));
 
         lb1.setText("jLabel1");
         jPanel1.add(lb1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 590, -1, -1));
+
+        listadopasajeros1.setBackground(new java.awt.Color(0, 0, 0));
+        listadopasajeros1.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
+        listadopasajeros1.setForeground(new java.awt.Color(0, 0, 0));
+        listadopasajeros1.setText("Listado de pasajeros");
+        listadopasajeros1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel1.add(listadopasajeros1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, -1, -1));
+
+        lbleclipse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
+        jPanel1.add(lbleclipse, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 730));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -216,6 +225,10 @@ public class listaXtour extends javax.swing.JFrame {
         desglose_pagos desglose_pagos = new desglose_pagos();
         desglose_pagos.setVisible(true);
     }//GEN-LAST:event_btnVerPagosActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -260,7 +273,8 @@ public class listaXtour extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lb1;
+    private javax.swing.JLabel lbEvento;
     private javax.swing.JLabel lbleclipse;
-    private javax.swing.JLabel listadopasajeros;
+    private javax.swing.JLabel listadopasajeros1;
     // End of variables declaration//GEN-END:variables
 }
