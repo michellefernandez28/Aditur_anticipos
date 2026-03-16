@@ -9,7 +9,7 @@ package model;
  * @author miche
  */
 public class AgregarAnticipo extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AgregarAnticipo.class.getName());
 
     /**
@@ -203,7 +203,7 @@ public class AgregarAnticipo extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         dispose();
-        listaXtour listaxtour = new listaXtour();
+        listaXtour listaxtour = new listaXtour(null, 0);
         listaxtour.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 

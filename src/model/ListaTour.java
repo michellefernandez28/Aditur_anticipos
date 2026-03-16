@@ -4,11 +4,21 @@
  */
 package model;
 
+import dao.EventoDAO;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author miche
  */
 public class ListaTour extends javax.swing.JFrame {
+
+    private ArrayList<Evento> Eventos;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaTour.class.getName());
 
@@ -16,8 +26,13 @@ public class ListaTour extends javax.swing.JFrame {
      * Creates new form ListaTour
      */
     public ListaTour() {
+        Eventos = new ArrayList<Evento>();
         initComponents();
-        setLocationRelativeTo(null);
+        ((javax.swing.JTextField) dtFecha.getDateEditor().getUiComponent())
+                .setBackground(new java.awt.Color(204, 204, 204));
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        Cargar();
+        VerDatos();
     }
 
     /**
@@ -35,22 +50,22 @@ public class ListaTour extends javax.swing.JFrame {
         tablaViajes = new javax.swing.JTable();
         btnEliminar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtCapacidad = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtCosto = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtCantDias = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        txtDetalles = new javax.swing.JTextField();
+        dtFecha = new com.toedter.calendar.JDateChooser();
+        jLabel9 = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         btnAgregarViaje = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,7 +81,7 @@ public class ListaTour extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Fecha", "Destino", "Capacidad", "Costo", "Tiquetes Vendidos", "Cant. Días", "Detalles"
+                "ID", "Nombre", "Fecha", "Capacidad", "Costo", "Tiquetes Vendidos", "Cant. Días", "Detalles"
             }
         ));
         tablaViajes.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -76,7 +91,7 @@ public class ListaTour extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablaViajes);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 1080, 480));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 760, 460));
 
         btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
         btnEliminar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
@@ -88,10 +103,7 @@ public class ListaTour extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Lista de viajes");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, -1, -1));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 1050, 780));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, -1, -1));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -100,58 +112,20 @@ public class ListaTour extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Fecha:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         jPanel4.add(jLabel2, gridBagConstraints);
-
-        jTextField1.setBackground(new java.awt.Color(204, 204, 204));
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 3;
-        gridBagConstraints.ipady = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
-        jPanel4.add(jTextField1, gridBagConstraints);
-
-        jLabel3.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Destino:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
-        jPanel4.add(jLabel3, gridBagConstraints);
-
-        jTextField2.setBackground(new java.awt.Color(204, 204, 204));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 3;
-        gridBagConstraints.ipady = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
-        jPanel4.add(jTextField2, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Capacidad:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         jPanel4.add(jLabel4, gridBagConstraints);
 
-        jTextField3.setBackground(new java.awt.Color(204, 204, 204));
+        txtCapacidad.setBackground(new java.awt.Color(204, 204, 204));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 3;
@@ -159,75 +133,107 @@ public class ListaTour extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
-        jPanel4.add(jTextField3, gridBagConstraints);
+        jPanel4.add(txtCapacidad, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Costo:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         jPanel4.add(jLabel5, gridBagConstraints);
 
-        jTextField4.setBackground(new java.awt.Color(204, 204, 204));
+        txtCosto.setBackground(new java.awt.Color(204, 204, 204));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 3;
         gridBagConstraints.ipady = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
-        jPanel4.add(jTextField4, gridBagConstraints);
+        jPanel4.add(txtCosto, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Cant. Días:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         jPanel4.add(jLabel7, gridBagConstraints);
 
-        jTextField5.setBackground(new java.awt.Color(204, 204, 204));
+        txtCantDias.setBackground(new java.awt.Color(204, 204, 204));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 3;
         gridBagConstraints.ipady = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
-        jPanel4.add(jTextField5, gridBagConstraints);
+        jPanel4.add(txtCantDias, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Detalles:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
         jPanel4.add(jLabel8, gridBagConstraints);
 
-        jTextField6.setBackground(new java.awt.Color(204, 204, 204));
+        txtDetalles.setBackground(new java.awt.Color(204, 204, 204));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 3;
         gridBagConstraints.ipady = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
-        jPanel4.add(jTextField6, gridBagConstraints);
+        jPanel4.add(txtDetalles, gridBagConstraints);
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 0, 410, 240));
+        dtFecha.setBackground(new java.awt.Color(204, 204, 204));
+        dtFecha.setPreferredSize(new java.awt.Dimension(286, 25));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
+        jPanel4.add(dtFecha, gridBagConstraints);
+
+        jLabel9.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("Nombre:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        jPanel4.add(jLabel9, gridBagConstraints);
+
+        txtNombre.setBackground(new java.awt.Color(204, 204, 204));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 3;
+        gridBagConstraints.ipady = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
+        jPanel4.add(txtNombre, gridBagConstraints);
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 360, 240));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -238,34 +244,148 @@ public class ListaTour extends javax.swing.JFrame {
         btnAgregarViaje.setText("Agregar viaje");
         btnAgregarViaje.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnAgregarViaje.addActionListener(this::btnAgregarViajeActionPerformed);
-        jPanel1.add(btnAgregarViaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 250, 120, 40));
+        jPanel1.add(btnAgregarViaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 300, 120, 40));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-110, 0, 1050, 730));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1250, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablaViajesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaViajesMouseClicked
-        // TODO add your handling code here:
+        EventPressed();
     }//GEN-LAST:event_tablaViajesMouseClicked
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void btnAgregarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarViajeActionPerformed
         // TODO add your handling code here:
-        //test comment
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        String nombre, destino, detalles;
+        LocalDate fecha;
+        int idEvento, capacidad, cantDias;
+        double costo;
+        try {
+//            String dia = Integer.toString(dtFecha.getCalendar().get(Calendar.DAY_OF_MONTH));
+//            String mes = Integer.toString(dtFecha.getCalendar().get(Calendar.MONTH) + 1);
+//            String anio = Integer.toString(dtFecha.getCalendar().get(Calendar.YEAR));
+//            fecha = (dia + "/" + mes + "/" + anio);
+            nombre = txtNombre.getText();
+            fecha = dtFecha.getDate().toInstant()
+                    .atZone(java.time.ZoneId.systemDefault())
+                    .toLocalDate();
+
+            detalles = txtDetalles.getText();
+            capacidad = Integer.parseInt(txtCapacidad.getText());
+            cantDias = Integer.parseInt(txtCantDias.getText());
+            costo = Double.parseDouble(txtCosto.getText());
+
+            idEvento = EventoDAO.obtenerSiguienteId();
+            Evento evento = new Evento(idEvento, cantDias, capacidad, nombre, detalles, Evento.EstadoEvento.Programado, fecha, costo);
+
+            // 1. Guardar en CSV
+            EventoDAO.guardar(evento);
+
+            // 2. Agregar a la tabla
+            Eventos.add(evento);
+            VerDatos();
+
+            // 3. Limpiar formulario
+            txtNombre.setText("");
+            txtDetalles.setText("");
+            txtCapacidad.setText("");
+            txtCantDias.setText("");
+            txtCosto.setText("");
+
+            dtFecha.setDate(null);
+
+            JOptionPane.showMessageDialog(this, "Evento agregado correctamente");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Revisa que los datos estén con el formato correcto");
+            StringBuilder sb = new StringBuilder("Se ha producido una excepción:\n");
+            for (StackTraceElement element : e.getStackTrace()) {
+                sb.append(element.toString()).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnAgregarViajeActionPerformed
+
+    private void Cargar() {
+        try {
+            Eventos = (ArrayList<Evento>) EventoDAO.listar();
+            System.out.println(Eventos);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar el Evento");
+            StringBuilder sb = new StringBuilder("Se ha producido una excepción:\n");
+            for (StackTraceElement element : e.getStackTrace()) {
+                sb.append(element.toString()).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    public void VerDatos() {
+
+        String matriz[][] = new String[Eventos.size()][8];
+        Evento e;
+        for (int i = 0; i < Eventos.size(); i++) {
+            e = Eventos.get(i);
+            matriz[i][0] = Integer.toString(e.getIdEvento());
+            matriz[i][1] = e.getNombre();
+            matriz[i][2] = e.getFecha().toString();
+            matriz[i][3] = Integer.toString(e.getCantidadParticipantes());
+            matriz[i][4] = Double.toString(e.getMontoPersona());
+            matriz[i][5] = "0";
+            matriz[i][6] = Integer.toString(e.getCantDias());
+            matriz[i][7] = e.getDetalles();
+
+        }
+        tablaViajes.setModel(new javax.swing.table.DefaultTableModel(
+                matriz,
+                new String[]{
+                    "ID", "Nombre", "Fecha", "Capacidad", "Costo",
+                    "Tiquetes Vendidos", "Cant. Días", "Detalles"
+                }
+        ));
+    }
+
+    public void EventPressed() {
+        int fila = tablaViajes.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione una fila ");
+        } else {
+            try {
+
+                Evento e = Eventos.get(fila);
+
+                listaXtour ventana = new listaXtour(e, fila);
+                ventana.setVisible(true);
+                System.out.println("Se abrió el evento correctamente");
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "El valor seleccionado en inválido.");
+                StringBuilder sb = new StringBuilder("Se ha producido una excepción:\n");
+                for (StackTraceElement element : e.getStackTrace()) {
+                    sb.append(element.toString()).append("\n");
+                }
+                JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -295,24 +415,24 @@ public class ListaTour extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarViaje;
     private javax.swing.JButton btnEliminar;
+    private com.toedter.calendar.JDateChooser dtFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JTable tablaViajes;
+    private javax.swing.JTextField txtCantDias;
+    private javax.swing.JTextField txtCapacidad;
+    private javax.swing.JTextField txtCosto;
+    private javax.swing.JTextField txtDetalles;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
