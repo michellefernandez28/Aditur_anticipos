@@ -4,11 +4,17 @@
  */
 package model;
 
+import dao.ClienteDAO;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author miche
  */
 public class listaXtour extends javax.swing.JFrame {
+
+    private ArrayList<Cliente> Clientes;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(listaXtour.class.getName());
 
@@ -16,8 +22,13 @@ public class listaXtour extends javax.swing.JFrame {
      * Creates new form listaXtour
      */
     public listaXtour(Evento e, int fila) {
+        Clientes = new ArrayList<Cliente>();
         initComponents();
-        setLocationRelativeTo(null);
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        lbEvento.setText(e.getNombre());
+        Cargar(e.getIdEvento());
+        VerDatos();
+
     }
 
     /**
@@ -31,14 +42,14 @@ public class listaXtour extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaPersonas = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         btnAgregarNuevo = new javax.swing.JButton();
         btnAgregarAnticipo = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         btnVerPagos = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbEvento = new javax.swing.JComboBox<>();
         btnVolver = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -46,7 +57,6 @@ public class listaXtour extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         lbEvento = new javax.swing.JLabel();
-        lb1 = new javax.swing.JLabel();
         listadopasajeros1 = new javax.swing.JLabel();
         lbleclipse = new javax.swing.JLabel();
 
@@ -55,8 +65,8 @@ public class listaXtour extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaPersonas.setBackground(new java.awt.Color(255, 255, 255));
+        tablaPersonas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -67,7 +77,7 @@ public class listaXtour extends javax.swing.JFrame {
                 "Nombre", "N. Cédula", "N. Tiquites", "Costo por tiquete", "Abonos", "Fecha de abono", "Pendiente", "Total"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaPersonas);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, 930, 410));
 
@@ -107,12 +117,12 @@ public class listaXtour extends javax.swing.JFrame {
         btnVerPagos.addActionListener(this::btnVerPagosActionPerformed);
         jPanel4.add(btnVerPagos);
 
-        jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Evento" }));
-        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
-        jPanel4.add(jComboBox1);
+        cbEvento.setBackground(new java.awt.Color(255, 255, 255));
+        cbEvento.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        cbEvento.setForeground(new java.awt.Color(0, 0, 0));
+        cbEvento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Evento" }));
+        cbEvento.addActionListener(this::cbEventoActionPerformed);
+        jPanel4.add(cbEvento);
 
         btnVolver.setBackground(new java.awt.Color(255, 255, 255));
         btnVolver.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
@@ -175,9 +185,6 @@ public class listaXtour extends javax.swing.JFrame {
         lbEvento.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel1.add(lbEvento, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 100, -1, -1));
 
-        lb1.setText("jLabel1");
-        jPanel1.add(lb1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 590, -1, -1));
-
         listadopasajeros1.setBackground(new java.awt.Color(0, 0, 0));
         listadopasajeros1.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
         listadopasajeros1.setForeground(new java.awt.Color(0, 0, 0));
@@ -226,9 +233,49 @@ public class listaXtour extends javax.swing.JFrame {
         desglose_pagos.setVisible(true);
     }//GEN-LAST:event_btnVerPagosActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cbEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEventoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cbEventoActionPerformed
+
+    private void Cargar(int idEvento) {
+        try {
+            Clientes = (ArrayList<Cliente>) ClienteDAO.listar(idEvento);
+            System.out.println(Clientes);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar los participantes");
+            StringBuilder sb = new StringBuilder("Se ha producido una excepción:\n");
+            for (StackTraceElement element : e.getStackTrace()) {
+                sb.append(element.toString()).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    public void VerDatos() {
+
+        String matriz[][] = new String[Clientes.size()][8];
+        Cliente c;
+        for (int i = 0; i < Clientes.size(); i++) {
+            c = Clientes.get(i);
+            matriz[i][0] = c.getNombre() + " " + c.getApellido();
+            matriz[i][1] = Integer.toString(c.getCedula());
+            matriz[i][2] = c.getApellido();
+
+        }
+        tablaPersonas.setModel(new javax.swing.table.DefaultTableModel(
+                matriz,
+                new String[]{
+                    "ID", "Nombre", "Fecha", "Capacidad", "Costo",
+                    "Tiquetes Vendidos", "Cant. Días", "Detalles"
+                }
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+    }
 
     /**
      * @param args the command line arguments
@@ -260,21 +307,20 @@ public class listaXtour extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarNuevo;
     private javax.swing.JButton btnVerPagos;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cbEvento;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JLabel lb1;
     private javax.swing.JLabel lbEvento;
     private javax.swing.JLabel lbleclipse;
     private javax.swing.JLabel listadopasajeros1;
+    private javax.swing.JTable tablaPersonas;
     // End of variables declaration//GEN-END:variables
 }
