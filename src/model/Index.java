@@ -3,11 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package model;
-//import dao.ClienteDAO;
 
+import dao.ClienteDAO;
 import dao.EventoDAO;
 import dao.ClienteXEventoDAO;
-//import dao.PagoDAO;
+import dao.PagoDAO;
 import java.io.IOException;
 
 /**
@@ -23,10 +23,10 @@ public class Index {
         try {
 
             // Inicializar archivos CSV
-            //ClienteDAO.inicializarArchivo();
+            ClienteDAO.inicializarArchivo();
             EventoDAO.inicializarArchivo();
             ClienteXEventoDAO.inicializarArchivo();
-            //PagoDAO.inicializarArchivo();
+            PagoDAO.inicializarArchivo();
 
         } catch (IOException e) {
 
