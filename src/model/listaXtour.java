@@ -33,13 +33,13 @@ public class listaXtour extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnAgregarNuevo = new javax.swing.JButton();
+        btnAgregarAnticipo = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnVerPagos = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -73,17 +73,19 @@ public class listaXtour extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setLayout(new java.awt.GridLayout(0, 1));
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 255));
-        jButton3.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(0, 0, 0));
-        jButton3.setText("Agregar nuevo");
-        jPanel4.add(jButton3);
+        btnAgregarNuevo.setBackground(new java.awt.Color(255, 255, 255));
+        btnAgregarNuevo.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        btnAgregarNuevo.setForeground(new java.awt.Color(0, 0, 0));
+        btnAgregarNuevo.setText("Agregar nuevo");
+        btnAgregarNuevo.addActionListener(this::btnAgregarNuevoActionPerformed);
+        jPanel4.add(btnAgregarNuevo);
 
-        jButton4.setBackground(new java.awt.Color(255, 255, 255));
-        jButton4.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(0, 0, 0));
-        jButton4.setText("Agregar anticipo");
-        jPanel4.add(jButton4);
+        btnAgregarAnticipo.setBackground(new java.awt.Color(255, 255, 255));
+        btnAgregarAnticipo.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        btnAgregarAnticipo.setForeground(new java.awt.Color(0, 0, 0));
+        btnAgregarAnticipo.setText("Agregar anticipo");
+        btnAgregarAnticipo.addActionListener(this::btnAgregarAnticipoActionPerformed);
+        jPanel4.add(btnAgregarAnticipo);
 
         jButton1.setBackground(new java.awt.Color(255, 255, 255));
         jButton1.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
@@ -97,11 +99,12 @@ public class listaXtour extends javax.swing.JFrame {
         jButton5.setText("Eliminar");
         jPanel4.add(jButton5);
 
-        jButton6.setBackground(new java.awt.Color(255, 255, 255));
-        jButton6.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(0, 0, 0));
-        jButton6.setText("Ver pagos");
-        jPanel4.add(jButton6);
+        btnVerPagos.setBackground(new java.awt.Color(255, 255, 255));
+        btnVerPagos.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        btnVerPagos.setForeground(new java.awt.Color(0, 0, 0));
+        btnVerPagos.setText("Ver pagos");
+        btnVerPagos.addActionListener(this::btnVerPagosActionPerformed);
+        jPanel4.add(btnVerPagos);
 
         jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
         jComboBox1.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
@@ -109,12 +112,12 @@ public class listaXtour extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Evento" }));
         jPanel4.add(jComboBox1);
 
-        jButton2.setBackground(new java.awt.Color(255, 255, 255));
-        jButton2.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(0, 0, 0));
-        jButton2.setText("Volver");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
-        jPanel4.add(jButton2);
+        btnVolver.setBackground(new java.awt.Color(255, 255, 255));
+        btnVolver.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        btnVolver.setForeground(new java.awt.Color(0, 0, 0));
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(this::btnVolverActionPerformed);
+        jPanel4.add(btnVolver);
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 160, 730));
 
@@ -190,9 +193,29 @@ public class listaXtour extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        dispose();
+        ListaTour listatour = new ListaTour();
+        listatour.setVisible(true);
+    }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnAgregarNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarNuevoActionPerformed
+        dispose();
+        agregarPersona agregarpersona = new agregarPersona();
+        agregarpersona.setVisible(true);
+    }//GEN-LAST:event_btnAgregarNuevoActionPerformed
+
+    private void btnAgregarAnticipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAnticipoActionPerformed
+        dispose();
+        AgregarAnticipo agregaranticipo = new AgregarAnticipo();
+        agregaranticipo.setVisible(true);
+    }//GEN-LAST:event_btnAgregarAnticipoActionPerformed
+
+    private void btnVerPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerPagosActionPerformed
+        dispose();
+        desglose_pagos desglose_pagos = new desglose_pagos();
+        desglose_pagos.setVisible(true);
+    }//GEN-LAST:event_btnVerPagosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,12 +243,12 @@ public class listaXtour extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarAnticipo;
+    private javax.swing.JButton btnAgregarNuevo;
+    private javax.swing.JButton btnVerPagos;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

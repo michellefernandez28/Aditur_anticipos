@@ -10,12 +10,12 @@ package model;
  */
 public class Index {
 
-    /*holi 
+    /*
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ListaTour frame = new ListaTour();
-        frame.setVisible(true);
+        inicioSesion iniciosesion = new inicioSesion();
+        iniciosesion.setVisible(true);
     }
 
 }

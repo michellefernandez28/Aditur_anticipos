@@ -33,8 +33,8 @@ public class inicioSesion extends javax.swing.JFrame {
         jblUsuario = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         jblContraseña = new javax.swing.JLabel();
-        txtcontraseña = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        txtContrasena = new javax.swing.JPasswordField();
+        btnIngresar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -60,15 +60,15 @@ public class inicioSesion extends javax.swing.JFrame {
         jblContraseña.setText("Usuario");
         jPanel2.add(jblContraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
 
-        txtcontraseña.setBackground(new java.awt.Color(204, 204, 204));
-        txtcontraseña.addActionListener(this::txtcontraseñaActionPerformed);
-        jPanel2.add(txtcontraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 370, 30));
+        txtContrasena.setBackground(new java.awt.Color(204, 204, 204));
+        txtContrasena.addActionListener(this::txtContrasenaActionPerformed);
+        jPanel2.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 370, 30));
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 204));
-        jButton1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jButton1.setText("Ingresar");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 370, 40));
+        btnIngresar.setBackground(new java.awt.Color(0, 0, 204));
+        btnIngresar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnIngresar.setText("Ingresar");
+        btnIngresar.addActionListener(this::btnIngresarActionPerformed);
+        jPanel2.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 370, 40));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Card.png"))); // NOI18N
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 520));
@@ -101,13 +101,15 @@ public class inicioSesion extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
-    private void txtcontraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcontraseñaActionPerformed
+    private void txtContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContrasenaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtcontraseñaActionPerformed
+    }//GEN-LAST:event_txtContrasenaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        dispose();
+        ListaTour listatour = new ListaTour();
+        listatour.setVisible(true);
+    }//GEN-LAST:event_btnIngresarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,7 +137,7 @@ public class inicioSesion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnIngresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
@@ -143,7 +145,7 @@ public class inicioSesion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel jblContraseña;
     private javax.swing.JLabel jblUsuario;
+    private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtUsuario;
-    private javax.swing.JPasswordField txtcontraseña;
     // End of variables declaration//GEN-END:variables
 }
