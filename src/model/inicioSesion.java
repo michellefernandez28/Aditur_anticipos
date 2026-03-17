@@ -36,6 +36,7 @@ public class inicioSesion extends javax.swing.JFrame {
         jblContraseña = new javax.swing.JLabel();
         txtContrasena = new javax.swing.JPasswordField();
         btnIngresar = new javax.swing.JButton();
+        lblMensaje = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -70,6 +71,15 @@ public class inicioSesion extends javax.swing.JFrame {
         btnIngresar.setText("Ingresar");
         btnIngresar.addActionListener(this::btnIngresarActionPerformed);
         jPanel2.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 370, 40));
+
+        lblMensaje.setBackground(new java.awt.Color(255, 255, 255));
+        lblMensaje.setForeground(new java.awt.Color(255, 0, 0));
+        lblMensaje.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                lblMensajeKeyTyped(evt);
+            }
+        });
+        jPanel2.add(lblMensaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 360, 20));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Card.png"))); // NOI18N
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 520));
@@ -107,10 +117,25 @@ public class inicioSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtContrasenaActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        dispose();
-        ListaTour listatour = new ListaTour();
-        listatour.setVisible(true);
+        String usuario = txtUsuario.getText();
+        String contrasea = new String(txtContrasena.getPassword());
+
+        model.Login datosInicio = new model.Login();
+
+        if (datosInicio.validarLogin(usuario, contrasea)) {
+            lblMensaje.setText("");
+            dispose();
+            ListaTour listatour = new ListaTour();
+            listatour.setVisible(true);
+        } else {
+            lblMensaje.setText("Usuario o contraseña incorrectos.");
+        }
+
     }//GEN-LAST:event_btnIngresarActionPerformed
+
+    private void lblMensajeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lblMensajeKeyTyped
+        lblMensaje.setText("");
+    }//GEN-LAST:event_lblMensajeKeyTyped
 
     /**
      * @param args the command line arguments
@@ -146,6 +171,7 @@ public class inicioSesion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel jblContraseña;
     private javax.swing.JLabel jblUsuario;
+    private javax.swing.JLabel lblMensaje;
     private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
