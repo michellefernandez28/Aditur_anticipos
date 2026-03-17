@@ -66,6 +66,7 @@ public class ListaTour extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         btnAgregarViaje = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnCerrarSesion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,7 +79,7 @@ public class ListaTour extends javax.swing.JFrame {
         btnEliminar.setText("Eliminar");
         btnEliminar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 570, 90, -1));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 570, 90, -1));
 
         tablaViajes.setBackground(new java.awt.Color(255, 255, 255));
         tablaViajes.setModel(new javax.swing.table.DefaultTableModel(
@@ -100,7 +101,7 @@ public class ListaTour extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tablaViajes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tablaViajes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tablaViajes.getTableHeader().setReorderingAllowed(false);
         tablaViajes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -261,17 +262,22 @@ public class ListaTour extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-110, 0, 1050, 730));
 
+        btnCerrarSesion.setBackground(new java.awt.Color(0, 0, 255));
+        btnCerrarSesion.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
+        btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrarSesion.setText("Cerrar Sesión");
+        btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
+        jPanel1.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 670, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1250, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, Short.MAX_VALUE)
         );
 
         pack();
@@ -378,6 +384,12 @@ public class ListaTour extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        dispose();
+        inicioSesion iniciosesion = new inicioSesion();
+        iniciosesion.setVisible(true);
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
     private void Cargar() {
         try {
             Eventos = (ArrayList<Evento>) EventoDAO.listar();
@@ -475,6 +487,7 @@ public class ListaTour extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarViaje;
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnEliminar;
     private com.toedter.calendar.JDateChooser dtFecha;
     private javax.swing.JLabel jLabel1;

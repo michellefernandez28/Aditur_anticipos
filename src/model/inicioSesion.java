@@ -68,6 +68,7 @@ public class inicioSesion extends javax.swing.JFrame {
 
         btnIngresar.setBackground(new java.awt.Color(0, 0, 204));
         btnIngresar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresar.setText("Ingresar");
         btnIngresar.addActionListener(this::btnIngresarActionPerformed);
         jPanel2.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 370, 40));
