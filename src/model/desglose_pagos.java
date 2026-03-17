@@ -88,7 +88,7 @@ public class desglose_pagos extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         dispose();
-        listaXtour listaxtour = new listaXtour(null, 0);
+        listaXtour listaxtour = new listaXtour(null);
         listaxtour.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 

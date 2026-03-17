@@ -5,7 +5,12 @@
 package model;
 
 import dao.ClienteDAO;
+import dao.ClienteXEventoDAO;
+import dao.PagoDAO;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,20 +20,23 @@ import javax.swing.JOptionPane;
 public class listaXtour extends javax.swing.JFrame {
 
     private ArrayList<Cliente> Clientes;
+    private List<Cliente_X_Evento> listaCXE;
+    private List<Pago> listaPagos;
+    private Evento e;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(listaXtour.class.getName());
 
     /**
      * Creates new form listaXtour
      */
-    public listaXtour(Evento e, int fila) {
+    public listaXtour(Evento e) {
         Clientes = new ArrayList<Cliente>();
         initComponents();
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         lbEvento.setText(e.getNombre());
+        this.e = e;
         Cargar(e.getIdEvento());
         VerDatos();
-
     }
 
     /**
@@ -74,7 +82,7 @@ public class listaXtour extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "N. Cédula", "N. Tiquites", "Costo por tiquete", "Abonos", "Fecha de abono", "Pendiente", "Total"
+                "Nombre", "N. Cédula", "N. Tiquites", "Costo por tiquete", "Abonos", "Fecha de abono", "Total", "Pendiente"
             }
         ));
         jScrollPane1.setViewportView(tablaPersonas);
@@ -217,7 +225,7 @@ public class listaXtour extends javax.swing.JFrame {
 
     private void btnAgregarNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarNuevoActionPerformed
         dispose();
-        agregarPersona agregarpersona = new agregarPersona();
+        agregarPersona agregarpersona = new agregarPersona(e);
         agregarpersona.setVisible(true);
     }//GEN-LAST:event_btnAgregarNuevoActionPerformed
 
@@ -239,35 +247,82 @@ public class listaXtour extends javax.swing.JFrame {
 
     private void Cargar(int idEvento) {
         try {
+            // Clientes del evento
             Clientes = (ArrayList<Cliente>) ClienteDAO.listar(idEvento);
-            System.out.println(Clientes);
+
+            listaCXE = ClienteXEventoDAO.buscarPorEvento(idEvento);
+
+            listaPagos = PagoDAO.buscarPorEvento(idEvento);
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar los participantes");
+
             StringBuilder sb = new StringBuilder("Se ha producido una excepción:\n");
             for (StackTraceElement element : e.getStackTrace()) {
                 sb.append(element.toString()).append("\n");
             }
+
             JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     public void VerDatos() {
 
         String matriz[][] = new String[Clientes.size()][8];
-        Cliente c;
-        for (int i = 0; i < Clientes.size(); i++) {
-            c = Clientes.get(i);
-            matriz[i][0] = c.getNombre() + " " + c.getApellido();
-            matriz[i][1] = Integer.toString(c.getCedula());
-            matriz[i][2] = c.getApellido();
 
+        for (int i = 0; i < Clientes.size(); i++) {
+
+            Cliente c = Clientes.get(i);
+
+            // Buscar Cliente_X_Evento en memoria
+            Cliente_X_Evento cxe = null;
+            for (Cliente_X_Evento item : listaCXE) {
+                if (item.getCedula() == c.getCedula()) {
+                    cxe = item;
+                    break;
+                }
+            }
+
+            int tiquetes = (cxe != null) ? cxe.getCant_personas() : 0;
+
+            double totalAPagar = tiquetes * e.getMontoPersona();
+
+            // Filtrar pagos en memoria
+            int abonos = 0;
+            double totalPagado = 0;
+            LocalDate fechaMasReciente = null;
+
+            for (Pago p : listaPagos) {
+                if (p.getCedula() == c.getCedula()) {
+
+                    abonos++;
+                    totalPagado += p.getMonto();
+
+                    if (fechaMasReciente == null || p.getFecha().isAfter(fechaMasReciente)) {
+                        fechaMasReciente = p.getFecha();
+                    }
+                }
+            }
+
+            String ultimaFecha = (fechaMasReciente != null) ? fechaMasReciente.toString() : "";
+
+            double pendiente = totalAPagar - totalPagado;
+
+            matriz[i][0] = c.getNombre() + " " + c.getApellido();
+            matriz[i][1] = String.valueOf(c.getCedula());
+            matriz[i][2] = String.valueOf(tiquetes);
+            matriz[i][3] = String.format("%.2f", e.getMontoPersona());
+            matriz[i][4] = String.valueOf(abonos);
+            matriz[i][5] = ultimaFecha;
+            matriz[i][6] = String.format("%.2f", totalPagado);
+            matriz[i][7] = String.format("%.2f", pendiente);
         }
+
         tablaPersonas.setModel(new javax.swing.table.DefaultTableModel(
                 matriz,
                 new String[]{
-                    "ID", "Nombre", "Fecha", "Capacidad", "Costo",
-                    "Tiquetes Vendidos", "Cant. Días", "Detalles"
+                    "Nombre", "Cédula", "N. Tiquetes", "Costo por tiquete",
+                    "Abonos", "Fecha de abono", "Total", "Pendiente"
                 }
         ) {
             @Override
@@ -299,7 +354,7 @@ public class listaXtour extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new listaXtour(null, 0).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new listaXtour(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -30,6 +30,7 @@ public class ClienteDAO {
 
     }
 
+    //COREGIR con VALIDACIÓN
     public static void guardar(Cliente obj) throws IOException {
 
         CSVUtility.escribirLinea(
@@ -115,5 +116,18 @@ public class ClienteDAO {
                 Constantes.ARCHIVO_CLIENTES,
                 nuevasLineas
         );
+    }
+
+    public static boolean existe(int cedula, int idEvento) throws IOException {
+
+        List<Cliente> lista = listar(idEvento); // asumimos que ya lo tenés
+
+        for (Cliente c : lista) {
+            if (c.getCedula() == cedula) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

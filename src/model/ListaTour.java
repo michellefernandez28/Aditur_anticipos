@@ -432,7 +432,7 @@ public class ListaTour extends javax.swing.JFrame {
 
                 Evento e = Eventos.get(fila);
 
-                listaXtour ventana = new listaXtour(e, fila);
+                listaXtour ventana = new listaXtour(e);
                 ventana.setVisible(true);
                 System.out.println("Se abrió el evento correctamente");
 
