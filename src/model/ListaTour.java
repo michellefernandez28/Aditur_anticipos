@@ -246,7 +246,7 @@ public class ListaTour extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 8, 5);
         jPanel4.add(txtNombre, gridBagConstraints);
 
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, 360, 240));
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 30, 360, 240));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -257,7 +257,7 @@ public class ListaTour extends javax.swing.JFrame {
         btnAgregarViaje.setText("Agregar viaje");
         btnAgregarViaje.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnAgregarViaje.addActionListener(this::btnAgregarViajeActionPerformed);
-        jPanel1.add(btnAgregarViaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 300, 120, 40));
+        jPanel1.add(btnAgregarViaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 300, 120, 40));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-110, 0, 1050, 730));
@@ -267,13 +267,13 @@ public class ListaTour extends javax.swing.JFrame {
         btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
         btnCerrarSesion.setText("Cerrar Sesión");
         btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
-        jPanel1.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 670, -1, -1));
+        jPanel1.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 680, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1220, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

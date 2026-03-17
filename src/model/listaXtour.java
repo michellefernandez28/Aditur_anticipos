@@ -87,7 +87,7 @@ public class listaXtour extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablaPersonas);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, 930, 410));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 930, 410));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setLayout(new java.awt.GridLayout(0, 1));
@@ -163,9 +163,9 @@ public class listaXtour extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(9, 9, 9)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jLabel2)
@@ -201,7 +201,7 @@ public class listaXtour extends javax.swing.JFrame {
         jPanel1.add(listadopasajeros1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, -1, -1));
 
         lbleclipse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
-        jPanel1.add(lbleclipse, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 730));
+        jPanel1.add(lbleclipse, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 740));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
