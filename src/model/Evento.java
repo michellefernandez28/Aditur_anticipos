@@ -127,4 +127,9 @@ public class Evento {
         this.montoPersona = montoPersona;
     }
 
+    @Override
+    public String toString() {
+        return this.getNombre();
+    }
+
 }

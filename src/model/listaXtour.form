@@ -69,8 +69,8 @@
                     <Column editable="true" title="Costo por tiquete" type="java.lang.Object"/>
                     <Column editable="true" title="Abonos" type="java.lang.Object"/>
                     <Column editable="true" title="Fecha de abono" type="java.lang.Object"/>
-                    <Column editable="true" title="Pendiente" type="java.lang.Object"/>
                     <Column editable="true" title="Total" type="java.lang.Object"/>
+                    <Column editable="true" title="Pendiente" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

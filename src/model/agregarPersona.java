@@ -4,20 +4,37 @@
  */
 package model;
 
+import dao.ClienteDAO;
+import dao.ClienteXEventoDAO;
+import dao.EventoDAO;
+import dao.PagoDAO;
+import java.awt.Color;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author miche
  */
 public class agregarPersona extends javax.swing.JFrame {
 
+    private Evento e;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(agregarPersona.class.getName());
 
     /**
      * Creates new form agregarAnticipo
      */
-    public agregarPersona() {
+    public agregarPersona(Evento e) {
         initComponents();
+        spiTiquetes.getEditor().getComponent(0).setBackground(new Color(255, 255, 255));
+        spiTiquetes.getEditor().getComponent(0).setForeground(new Color(0, 0, 0));
         setLocationRelativeTo(null);
+        this.e = e;
+        cargarEventos();
+        actualizarCosto();
     }
 
     /**
@@ -34,18 +51,18 @@ public class agregarPersona extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         contenedor = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtCedula = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbEvento = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        txtCosto = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtAbono = new javax.swing.JTextField();
+        spiTiquetes = new javax.swing.JSpinner();
+        btnRegistrar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -72,12 +89,12 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel2, gridBagConstraints);
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombre.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField1, gridBagConstraints);
+        contenedor.add(txtNombre, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -89,14 +106,14 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel3, gridBagConstraints);
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
+        txtCedula.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField2, gridBagConstraints);
+        contenedor.add(txtCedula, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
@@ -108,15 +125,6 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel4, gridBagConstraints);
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField3, gridBagConstraints);
-
         jLabel5.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("N. Tiquetes");
@@ -127,14 +135,16 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel5, gridBagConstraints);
 
-        jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
+        cbEvento.setBackground(new java.awt.Color(255, 255, 255));
+        cbEvento.addItemListener(this::cbEventoItemStateChanged);
+        cbEvento.addActionListener(this::cbEventoActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jComboBox1, gridBagConstraints);
+        contenedor.add(cbEvento, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
@@ -146,14 +156,14 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel6, gridBagConstraints);
 
-        jTextField5.setBackground(new java.awt.Color(255, 255, 255));
+        txtCosto.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField5, gridBagConstraints);
+        contenedor.add(txtCosto, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
@@ -165,19 +175,29 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel7, gridBagConstraints);
 
-        jTextField6.setBackground(new java.awt.Color(255, 255, 255));
+        txtAbono.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField6, gridBagConstraints);
+        contenedor.add(txtAbono, gridBagConstraints);
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 204));
-        jButton1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Registrar");
+        spiTiquetes.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spiTiquetes.addChangeListener(this::spiTiquetesStateChanged);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
+        contenedor.add(spiTiquetes, gridBagConstraints);
+
+        btnRegistrar.setBackground(new java.awt.Color(0, 0, 204));
+        btnRegistrar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(this::btnRegistrarActionPerformed);
 
         jLabel9.setFont(new java.awt.Font("Berlin Sans FB", 0, 36)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
@@ -197,7 +217,7 @@ public class agregarPersona extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -215,7 +235,7 @@ public class agregarPersona extends javax.swing.JFrame {
                 .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
@@ -241,9 +261,147 @@ public class agregarPersona extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         dispose();
-        listaXtour listaxtour = new listaXtour(null, 0);
+        listaXtour listaxtour = new listaXtour(e);
         listaxtour.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void cbEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEventoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbEventoActionPerformed
+
+    private void spiTiquetesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spiTiquetesStateChanged
+        actualizarCosto();
+    }//GEN-LAST:event_spiTiquetesStateChanged
+
+    private void cbEventoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEventoItemStateChanged
+        actualizarCosto();
+    }//GEN-LAST:event_cbEventoItemStateChanged
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        try {
+            // ===== 1. Obtener datos =====
+            String nombreCompleto = txtNombre.getText().trim();
+            int cedula = Integer.parseInt(txtCedula.getText().trim());
+            int cantidad = (int) spiTiquetes.getValue();
+            double costo = Double.parseDouble(txtCosto.getText().trim());
+            double abono = Double.parseDouble(txtAbono.getText().trim());
+
+            Evento eventoSeleccionado = (Evento) cbEvento.getSelectedItem();
+            int idEvento = eventoSeleccionado.getIdEvento();
+
+            // ===== 2. Separar nombre y apellido =====
+            String nombre;
+            String apellidos;
+
+            if (nombreCompleto.contains(" ")) {
+                nombre = nombreCompleto.substring(0, nombreCompleto.indexOf(" "));
+                apellidos = nombreCompleto.substring(nombreCompleto.indexOf(" ") + 1);
+            } else {
+                nombre = nombreCompleto;
+                apellidos = "";
+            }
+
+            // ===== 3. Verificar si cliente existe =====
+            boolean clienteExiste = ClienteDAO.existe(cedula, eventoSeleccionado.getIdEvento()); // tenés que crear este método
+
+            if (!clienteExiste) {
+                Cliente cliente = new Cliente(cedula, nombre, apellidos);
+                ClienteDAO.guardar(cliente);
+            }
+
+            // ===== 4. Validar si ya existe inscripción =====
+            if (ClienteXEventoDAO.existeInscripcion(cedula, idEvento)) {
+                JOptionPane.showMessageDialog(this,
+                        "El cliente ya está inscrito en este evento.",
+                        "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            } else {
+                // ===== 5. Crear Cliente_X_Evento =====
+                Cliente_X_Evento cxe = new Cliente_X_Evento(
+                        cedula,
+                        idEvento,
+                        cantidad,
+                        String.valueOf(idEvento) + "_" + String.valueOf(cedula),
+                        ""
+                );
+
+                // ===== 6. Guardar inscripción =====
+                ClienteXEventoDAO.guardar(cxe);
+
+                // ===== 7. Guardar abono como pago
+                if (abono > costo) {
+                    JOptionPane.showMessageDialog(this,
+                            "El abono no puede ser mayor al costo total.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                } else if (abono > 0) {
+                    Pago pago = new Pago();
+                    pago.setFecha(LocalDate.now()); // fecha actual
+                    pago.setMonto(abono);
+                    pago.setCedula(cedula);
+                    pago.setId_evento(PagoDAO.obtenerSiguienteId());
+
+                    PagoDAO.guardar(pago);
+                }
+                // ===== 8. Éxito =====
+                {
+                    JOptionPane.showMessageDialog(this,
+                            "Cliente registrado correctamente.",
+                            "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
+            // ===== 9. Cerrar y volver =====
+            dispose();
+            listaXtour listaxtour = new listaXtour(e);
+            listaxtour.setVisible(true);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al guardar: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void cargarEventos() {
+        try {
+            List<Evento> lista = EventoDAO.listar();
+
+            DefaultComboBoxModel<Evento> modelo = new DefaultComboBoxModel<>();
+
+            for (Evento evento : lista) {
+                modelo.addElement(evento);
+            }
+
+            cbEvento.setModel(modelo);
+
+            // Auto-seleccionar el evento actual
+            for (int i = 0; i < cbEvento.getItemCount(); i++) {
+                Evento item = cbEvento.getItemAt(i);
+
+                if (item.getIdEvento() == e.getIdEvento()) {
+                    cbEvento.setSelectedIndex(i);
+                    break;
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void actualizarCosto() {
+        Evento seleccionado = (Evento) cbEvento.getSelectedItem();
+
+        int cantidad = (int) spiTiquetes.getValue();
+        double costo = cantidad * seleccionado.getMontoPersona();
+
+        txtCosto.setText(String.valueOf(costo));
+    }
 
     /**
      * @param args the command line arguments
@@ -267,14 +425,16 @@ public class agregarPersona extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new agregarPersona().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new agregarPersona(null
+        ).setVisible(true)
+        );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<Evento> cbEvento;
     private javax.swing.JPanel contenedor;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -285,10 +445,10 @@ public class agregarPersona extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JSpinner spiTiquetes;
+    private javax.swing.JTextField txtAbono;
+    private javax.swing.JTextField txtCedula;
+    private javax.swing.JTextField txtCosto;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

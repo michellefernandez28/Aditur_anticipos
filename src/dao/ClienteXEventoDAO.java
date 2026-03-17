@@ -22,7 +22,7 @@ public class ClienteXEventoDAO {
 
         CSVUtility.crearArchivo(
                 Constantes.ARCHIVO_CLIENTE_EVENTO,
-                "cedula" + SEP + "id_Evento" + SEP + "grupo" + SEP + "cant_personas" + SEP + "detalles"
+                "cedula" + SEP + "id_Evento" + SEP + "cant_personas" + SEP + "grupo" + SEP + "detalles"
         );
 
     }
@@ -105,6 +105,19 @@ public class ClienteXEventoDAO {
         }
 
         CSVUtility.sobrescribirArchivo(Constantes.ARCHIVO_CLIENTE_EVENTO, nuevasLineas);
+    }
+
+    public static Cliente_X_Evento obtener(int cedula, int idEvento) throws IOException {
+
+        List<Cliente_X_Evento> lista = listar();
+
+        for (Cliente_X_Evento c : lista) {
+            if (c.getCedula() == cedula && c.getId_evento() == idEvento) {
+                return c;
+            }
+        }
+
+        return null;
     }
 
     public static List<Cliente_X_Evento> buscarPorCedula(int cedula) throws IOException {
