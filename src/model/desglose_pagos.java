@@ -99,20 +99,20 @@ public class desglose_pagos extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablaPagos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 200, 990, 320));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 990, -1));
 
         btnVolver.setBackground(new java.awt.Color(0, 0, 204));
         btnVolver.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
         btnVolver.addActionListener(this::btnVolverActionPerformed);
-        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 630, -1, -1));
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 640, -1, -1));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Desglose de Pagos");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 100, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, -1, -1));
 
         txtFiltroNombre.setBackground(java.awt.Color.white);
         txtFiltroNombre.setForeground(new java.awt.Color(0, 0, 0));
