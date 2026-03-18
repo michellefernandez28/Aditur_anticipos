@@ -18,23 +18,27 @@ import javax.swing.JOptionPane;
  *
  * @author miche
  */
-public class agregarPersona extends javax.swing.JFrame {
+public class editarPersona extends javax.swing.JFrame {
 
     private Evento e;
+    private int cedula;
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(agregarPersona.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(editarPersona.class.getName());
 
     /**
      * Creates new form agregarAnticipo
      */
-    public agregarPersona(Evento e) {
+    public editarPersona(Evento e, int cedula) {
         initComponents();
         spiTiquetes.getEditor().getComponent(0).setBackground(new Color(255, 255, 255));
         spiTiquetes.getEditor().getComponent(0).setForeground(new Color(0, 0, 0));
+        txtEvento.setFocusable(false);
         txtCosto.setFocusable(false);
+
         setLocationRelativeTo(null);
         this.e = e;
-        cargarEventos();
+        this.cedula = cedula;
+        llenarCampos();
         actualizarCosto();
     }
 
@@ -54,18 +58,16 @@ public class agregarPersona extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtCedula = new javax.swing.JTextField();
+        txtEvento = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        cbEvento = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         txtCosto = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        txtAbono = new javax.swing.JTextField();
         spiTiquetes = new javax.swing.JSpinner();
-        btnRegistrar = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        btnVolver = new javax.swing.JButton();
+        txtCedula = new javax.swing.JTextField();
+        btnGuardar = new javax.swing.JButton();
+        lbTitulo = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -107,14 +109,15 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel3, gridBagConstraints);
 
-        txtCedula.setBackground(new java.awt.Color(255, 255, 255));
+        txtEvento.setEditable(false);
+        txtEvento.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(txtCedula, gridBagConstraints);
+        contenedor.add(txtEvento, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
@@ -136,17 +139,6 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel5, gridBagConstraints);
 
-        cbEvento.setBackground(new java.awt.Color(255, 255, 255));
-        cbEvento.addItemListener(this::cbEventoItemStateChanged);
-        cbEvento.addActionListener(this::cbEventoActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(cbEvento, gridBagConstraints);
-
         jLabel6.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Costo del tiquete");
@@ -167,25 +159,6 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
         contenedor.add(txtCosto, gridBagConstraints);
 
-        jLabel7.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Abono");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
-        contenedor.add(jLabel7, gridBagConstraints);
-
-        txtAbono.setBackground(new java.awt.Color(255, 255, 255));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(txtAbono, gridBagConstraints);
-
         spiTiquetes.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         spiTiquetes.addChangeListener(this::spiTiquetesStateChanged);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -195,21 +168,30 @@ public class agregarPersona extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
         contenedor.add(spiTiquetes, gridBagConstraints);
 
-        btnRegistrar.setBackground(new java.awt.Color(0, 0, 204));
-        btnRegistrar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistrar.setText("Registrar");
-        btnRegistrar.addActionListener(this::btnRegistrarActionPerformed);
+        txtCedula.setBackground(new java.awt.Color(255, 255, 255));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
+        contenedor.add(txtCedula, gridBagConstraints);
 
-        jLabel9.setFont(new java.awt.Font("Berlin Sans FB", 0, 36)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Formulario de Inscripción");
+        btnGuardar.setBackground(new java.awt.Color(0, 0, 204));
+        btnGuardar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(this::btnGuardarActionPerformed);
 
-        btnVolver.setBackground(new java.awt.Color(0, 0, 204));
-        btnVolver.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
-        btnVolver.setText("Volver");
-        btnVolver.addActionListener(this::btnVolverActionPerformed);
+        lbTitulo.setFont(new java.awt.Font("Berlin Sans FB", 0, 36)); // NOI18N
+        lbTitulo.setForeground(new java.awt.Color(0, 0, 0));
+        lbTitulo.setText("Editando a ");
+
+        btnCancelar.setBackground(new java.awt.Color(0, 0, 204));
+        btnCancelar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -219,111 +201,67 @@ public class agregarPersona extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(57, 57, 57)
-                        .addComponent(jLabel9)))
+                        .addComponent(lbTitulo)))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 90, 530, 550));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1090, 720));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 750));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1240, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
         listaXtour listaxtour = new listaXtour(e);
         listaxtour.setVisible(true);
-    }//GEN-LAST:event_btnVolverActionPerformed
-
-    private void cbEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEventoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbEventoActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void spiTiquetesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spiTiquetesStateChanged
         actualizarCosto();
     }//GEN-LAST:event_spiTiquetesStateChanged
 
-    private void cbEventoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEventoItemStateChanged
-        actualizarCosto();
-    }//GEN-LAST:event_cbEventoItemStateChanged
-
-    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try {
             // ===== 1. Obtener datos =====
-            Evento eventoSeleccionado = (Evento) cbEvento.getSelectedItem();
-            int idEvento = eventoSeleccionado.getIdEvento();
-            if (txtNombre.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Ingrese un nombre válido");
-                return;
-            }
-
-            if (txtCedula.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Ingrese una cédula valida");
-                return;
-            }
-            String cedulaTexto = txtCedula.getText().trim();
-            if (!cedulaTexto.matches("\\d+")) {
-                JOptionPane.showMessageDialog(this, "La cédula debe contener solo números (sin espacios ni guiones)");
-                return;
-            }
-            if (txtAbono.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Ingrese un monto de abono");
-                return;
-            }
-
             String nombreCompleto = txtNombre.getText().trim();
+            int cedulaEditada = Integer.parseInt(txtCedula.getText().trim());
             int cantidad = (int) spiTiquetes.getValue();
-            double costo = Double.parseDouble(txtCosto.getText().trim());
-            int cedula = Integer.parseInt(cedulaTexto);
-            double abono = Double.parseDouble(txtAbono.getText().trim());
 
-            if (abono > costo) {
-                JOptionPane.showMessageDialog(this,
-                        "El abono no puede ser mayor al costo total.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            } else if (abono < 0) {
-                JOptionPane.showMessageDialog(this,
-                        "El abono debe ser mayor o igual a 0.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            Evento eventoSeleccionado = e;
+            int idEvento = eventoSeleccionado.getIdEvento();
 
             // ===== 2. Separar nombre y apellido =====
             String nombre;
@@ -340,99 +278,112 @@ public class agregarPersona extends javax.swing.JFrame {
             // ===== 3. Verificar si cliente existe =====
             boolean clienteExiste = ClienteDAO.existe(cedula, eventoSeleccionado.getIdEvento()); // tenés que crear este método
 
-            if (!clienteExiste) {
-                Cliente cliente = new Cliente(cedula, nombre, apellidos);
-                ClienteDAO.guardar(cliente);
-            }
+            if (clienteExiste) {
+                boolean actualizarCXE = false;
+                Cliente_X_Evento cxeActual = new Cliente_X_Evento();
+                try {
+                    // ===== 4. Editar Cliente =====
+                    Cliente nuevoCliente = new Cliente(cedulaEditada, nombre, apellidos);
 
-            // ===== 4. Validar si ya existe inscripción =====
-            if (ClienteXEventoDAO.existeInscripcion(cedula, idEvento)) {
-                JOptionPane.showMessageDialog(this,
-                        "El cliente ya está inscrito en este evento.",
-                        "Aviso",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            } else {
-                // ===== 5. Crear Cliente_X_Evento =====
-                Cliente_X_Evento cxe = new Cliente_X_Evento(
-                        cedula,
-                        idEvento,
-                        cantidad,
-                        String.valueOf(idEvento) + "_" + String.valueOf(cedula),
-                        ""
-                );
+                    // ===== 5. Verificar registro y modificar =====
+                    if (ClienteXEventoDAO.existeInscripcion(cedula, idEvento)) {
+                        cxeActual = ClienteXEventoDAO.obtener(cedula, idEvento);
 
-                // ===== 6. Guardar inscripción =====
-                ClienteXEventoDAO.guardar(cxe);
+                        if (cedulaEditada != cxeActual.getCedula()) {
+                            cxeActual.setCedula(cedulaEditada);
+                            actualizarCXE = true;
+                        }
+                        if (cantidad != cxeActual.getCant_personas()) {
+                            cxeActual.setCant_personas(cantidad);
+                            actualizarCXE = true;
+                        }
 
-                // ===== 7. Guardar abono como pago
-                if (abono > 0) {
-                    Pago pago = new Pago();
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "El cliente no se encuentra registrado en este evento.",
+                                "Aviso",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
 
-                    pago.setFecha(LocalDate.now());
-                    pago.setMonto(abono);
-                    pago.setCedula(cedula);
-                    pago.setId_evento(idEvento);
-                    pago.setId_pago(PagoDAO.obtenerSiguienteId());
+                    // ===== 6. Ejecutar actualización =====
+                    ClienteDAO.actualizar(cedula, nuevoCliente);
+                    if (actualizarCXE) {
+                        ClienteXEventoDAO.actualizar(cedula, cxeActual);
+                    }
 
-                    PagoDAO.guardar(pago);
-                }
-                // ===== 8. Éxito =====
-                {
+                    List<Pago> pagosCliente = PagoDAO.buscarPorCedulaYEvento(cedula, idEvento);
+                    for (Pago p : pagosCliente) {
+                        p.setCedula(cedulaEditada);
+                        PagoDAO.actualizar(p);
+                    }
+
+                } catch (Exception e) {
                     JOptionPane.showMessageDialog(this,
-                            "Cliente registrado correctamente.",
-                            "Éxito",
-                            JOptionPane.INFORMATION_MESSAGE);
+                            "Error al editar: " + e.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "El cliente con cédula " + cedula + " no encontrado",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
-            // ===== 9. Cerrar y volver =====
+            // ===== 7. Éxito =====
+            {
+                JOptionPane.showMessageDialog(this,
+                        "Cliente actualizado correctamente.",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            // ===== 8. Cerrar y volver =====
             dispose();
             listaXtour listaxtour = new listaXtour(e);
             listaxtour.setVisible(true);
 
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Ingrese un número válido");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                    "Error al guardar: " + e.getMessage(),
+                    "Error al actualizar: " + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnRegistrarActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void cargarEventos() {
+    private void llenarCampos() {
         try {
-            List<Evento> lista = EventoDAO.listar();
+            boolean clienteExiste = ClienteDAO.existe(cedula, e.getIdEvento()); // tenés que crear este método
+            Cliente c = new Cliente();
+            if (clienteExiste) {
+                c = ClienteDAO.buscarXCedula(cedula);
+                Cliente_X_Evento cxe = ClienteXEventoDAO.obtener(cedula, e.getIdEvento());
+                lbTitulo.setText("Editando usuario " + c.getNombre());
+                txtNombre.setText(c.getNombre() + " " + c.getApellido());
+                txtCedula.setText(String.valueOf(cedula));
+                txtEvento.setText(String.valueOf(e.getNombre()));
+                spiTiquetes.setValue(cxe.getCant_personas());
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Cliente no encontrado.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                dispose();
 
-            DefaultComboBoxModel<Evento> modelo = new DefaultComboBoxModel<>();
-
-            for (Evento evento : lista) {
-                modelo.addElement(evento);
             }
 
-            cbEvento.setModel(modelo);
-
-            // Auto-seleccionar el evento actual
-            for (int i = 0; i < cbEvento.getItemCount(); i++) {
-                Evento item = cbEvento.getItemAt(i);
-
-                if (item.getIdEvento() == e.getIdEvento()) {
-                    cbEvento.setSelectedIndex(i);
-                    break;
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error encontrar Cliente: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void actualizarCosto() {
-        Evento seleccionado = (Evento) cbEvento.getSelectedItem();
-
         int cantidad = (int) spiTiquetes.getValue();
-        double costo = cantidad * seleccionado.getMontoPersona();
+        double costo = cantidad * e.getMontoPersona();
 
         txtCosto.setText(String.valueOf(costo));
     }
@@ -459,15 +410,14 @@ public class agregarPersona extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new agregarPersona(null
+        java.awt.EventQueue.invokeLater(() -> new editarPersona(null, 0
         ).setVisible(true)
         );
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRegistrar;
-    private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<Evento> cbEvento;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JPanel contenedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -475,14 +425,13 @@ public class agregarPersona extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lbTitulo;
     private javax.swing.JSpinner spiTiquetes;
-    private javax.swing.JTextField txtAbono;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtCosto;
+    private javax.swing.JTextField txtEvento;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

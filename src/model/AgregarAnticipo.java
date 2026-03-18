@@ -4,6 +4,11 @@
  */
 package model;
 
+import dao.ClienteDAO;
+import dao.PagoDAO;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author miche
@@ -11,12 +16,26 @@ package model;
 public class AgregarAnticipo extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AgregarAnticipo.class.getName());
+    private Evento e;
+    private int cedula;
+    private double pendiente;
 
     /**
      * Creates new form AgregarAnticipo
      */
-    public AgregarAnticipo() {
+    public AgregarAnticipo(Evento e, int cedula, double pendiente) {
         initComponents();
+        setLocationRelativeTo(null);
+        txtPendiente.setFocusable(false);
+        txtNombre.setFocusable(false);
+        ((javax.swing.JTextField) dtFecha.getDateEditor().getUiComponent())
+                .setBackground(new java.awt.Color(204, 204, 204));
+
+        this.e = e;
+        this.cedula = cedula;
+        this.pendiente = pendiente;
+
+        cargarDatos();
     }
 
     /**
@@ -34,16 +53,16 @@ public class AgregarAnticipo extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         contenedor = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
+        txtPendiente = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtAbono = new javax.swing.JTextField();
+        dtFecha = new com.toedter.calendar.JDateChooser();
+        btnAgregar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        btnVolver = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,28 +88,30 @@ public class AgregarAnticipo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel2, gridBagConstraints);
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombre.setEditable(false);
+        txtNombre.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField1, gridBagConstraints);
+        contenedor.add(txtNombre, gridBagConstraints);
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
+        txtPendiente.setEditable(false);
+        txtPendiente.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField3, gridBagConstraints);
+        contenedor.add(txtPendiente, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("N. Tiquetes");
+        jLabel5.setText("Pendiente");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel5, gridBagConstraints);
@@ -99,20 +120,10 @@ public class AgregarAnticipo extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Fecha");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel6, gridBagConstraints);
-
-        jTextField5.setBackground(new java.awt.Color(255, 255, 255));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.2;
-        gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField5, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
@@ -124,29 +135,36 @@ public class AgregarAnticipo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 13, 13, 13);
         contenedor.add(jLabel7, gridBagConstraints);
 
-        jTextField6.setBackground(new java.awt.Color(255, 255, 255));
+        txtAbono.setBackground(new java.awt.Color(255, 255, 255));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
-        contenedor.add(jTextField6, gridBagConstraints);
+        contenedor.add(txtAbono, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(14, 10, 14, 14);
+        contenedor.add(dtFecha, gridBagConstraints);
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 204));
-        jButton1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Agregar");
+        btnAgregar.setBackground(new java.awt.Color(0, 0, 204));
+        btnAgregar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(this::btnAgregarActionPerformed);
 
         jLabel9.setFont(new java.awt.Font("Berlin Sans FB", 0, 36)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Agregar anticipo");
 
-        btnVolver.setBackground(new java.awt.Color(0, 0, 204));
-        btnVolver.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        btnVolver.setForeground(new java.awt.Color(255, 255, 255));
-        btnVolver.setText("Volver");
-        btnVolver.addActionListener(this::btnVolverActionPerformed);
+        btnCancelar.setBackground(new java.awt.Color(0, 0, 204));
+        btnCancelar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -156,9 +174,9 @@ public class AgregarAnticipo extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(19, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -175,8 +193,8 @@ public class AgregarAnticipo extends javax.swing.JFrame {
                 .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
 
@@ -201,11 +219,79 @@ public class AgregarAnticipo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
         listaXtour listaxtour = new listaXtour(null);
         listaxtour.setVisible(true);
-    }//GEN-LAST:event_btnVolverActionPerformed
+
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        try {
+            // Validar monto
+            if (txtAbono.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese un monto");
+                return;
+            }
+
+            double abono = Double.parseDouble(txtAbono.getText());
+
+            if (abono <= 0) {
+                JOptionPane.showMessageDialog(this, "El abono debe ser mayor a 0");
+                return;
+            }
+
+            if (abono > pendiente) {
+                JOptionPane.showMessageDialog(this, "El abono es mayor al pendiente");
+                return;
+            }
+
+            if (dtFecha.getDate() == null) {
+                JOptionPane.showMessageDialog(this, "Seleccione una fecha");
+                return;
+            }
+
+            // Crear pago
+            Pago p;
+            LocalDate fecha = dtFecha.getDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+            p = new Pago(
+                    PagoDAO.obtenerSiguienteId(),
+                    fecha,
+                    abono,
+                    cedula,
+                    e.getIdEvento()
+            );
+
+            PagoDAO.guardar(p);
+
+            JOptionPane.showMessageDialog(this, "Abono registrado correctamente");
+
+            // Regresar
+            dispose();
+            listaXtour lista = new listaXtour(e);
+            lista.setVisible(true);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número válido");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al guardar el abono");
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void cargarDatos() {
+        try {
+            Cliente c = ClienteDAO.buscarXCedula(cedula);
+
+            txtNombre.setText(c.getNombre() + " " + c.getApellido());
+            txtPendiente.setText(String.format("%.2f", pendiente));
+
+            // Fecha actual
+            dtFecha.setDate(new java.util.Date());
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar datos");
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -229,13 +315,14 @@ public class AgregarAnticipo extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new AgregarAnticipo().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new AgregarAnticipo(null, 0, 0).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnVolver;
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JPanel contenedor;
-    private javax.swing.JButton jButton1;
+    private com.toedter.calendar.JDateChooser dtFecha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
@@ -245,9 +332,8 @@ public class AgregarAnticipo extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField txtAbono;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtPendiente;
     // End of variables declaration//GEN-END:variables
 }

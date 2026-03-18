@@ -4,6 +4,20 @@
  */
 package model;
 
+import dao.ClienteDAO;
+import dao.EventoDAO;
+import dao.PagoDAO;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 /**
  *
  * @author miche
@@ -11,12 +25,23 @@ package model;
 public class desglose_pagos extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(desglose_pagos.class.getName());
+    private TableRowSorter<DefaultTableModel> sorter;
+    Evento e;
 
     /**
      * Creates new form desglose_pagos
      */
-    public desglose_pagos() {
+    public desglose_pagos(Evento evento) {
         initComponents();
+        ((javax.swing.JTextField) dtDesde.getDateEditor().getUiComponent())
+                .setBackground(new java.awt.Color(204, 204, 204));
+        ((javax.swing.JTextField) dtHasta.getDateEditor().getUiComponent())
+                .setBackground(new java.awt.Color(204, 204, 204));
+        this.e = evento;
+        setLocationRelativeTo(null);
+        cargarTabla();
+        inicializarFiltro();
+
     }
 
     /**
@@ -30,9 +55,21 @@ public class desglose_pagos extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaPagos = new javax.swing.JTable();
         btnVolver = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        txtFiltroNombre = new javax.swing.JTextField();
+        txtFiltroCedula = new javax.swing.JTextField();
+        txtFiltroEvento = new javax.swing.JTextField();
+        dtHasta = new com.toedter.calendar.JDateChooser();
+        dtDesde = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        btnFiltrar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -40,19 +77,27 @@ public class desglose_pagos extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaPagos.setBackground(new java.awt.Color(255, 255, 255));
+        tablaPagos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Cliente", "Abono", "Abono", "Abono", "Total abono", "Saldo pendiente"
+                "Cliente", "Nombre", "Abono", "Fecha", "Evento"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tablaPagos);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 990, -1));
 
@@ -68,6 +113,65 @@ public class desglose_pagos extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Desglose de Pagos");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, -1, -1));
+
+        txtFiltroNombre.setBackground(java.awt.Color.white);
+        txtFiltroNombre.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtFiltroNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 570, 140, -1));
+
+        txtFiltroCedula.setBackground(java.awt.Color.white);
+        txtFiltroCedula.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtFiltroCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 570, 140, -1));
+
+        txtFiltroEvento.setBackground(java.awt.Color.white);
+        txtFiltroEvento.setForeground(new java.awt.Color(0, 0, 0));
+        txtFiltroEvento.addActionListener(this::txtFiltroEventoActionPerformed);
+        jPanel1.add(txtFiltroEvento, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 570, 130, -1));
+
+        dtHasta.setBackground(java.awt.Color.white);
+        dtHasta.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(dtHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 600, 150, -1));
+
+        dtDesde.setBackground(java.awt.Color.white);
+        dtDesde.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(dtDesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 570, 150, -1));
+
+        jLabel3.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Nombre");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 550, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Cédula");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 550, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Evento");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 550, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Rango de fechas");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 550, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Desde");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 570, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("Hasta");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 600, -1, -1));
+
+        btnFiltrar.setBackground(new java.awt.Color(204, 204, 204));
+        btnFiltrar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        btnFiltrar.setForeground(new java.awt.Color(0, 0, 0));
+        btnFiltrar.setText("Flitrar");
+        btnFiltrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnFiltrar.addActionListener(this::btnFiltrarActionPerformed);
+        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 610, 120, 40));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Ellipse 198.png"))); // NOI18N
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1020, 720));
@@ -88,9 +192,146 @@ public class desglose_pagos extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         dispose();
-        listaXtour listaxtour = new listaXtour(null);
+        listaXtour listaxtour = new listaXtour(e);
         listaxtour.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void txtFiltroEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFiltroEventoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFiltroEventoActionPerformed
+
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        aplicarFiltros();
+
+    }//GEN-LAST:event_btnFiltrarActionPerformed
+
+    private void cargarTabla() {
+        try {
+            List<Pago> pagos = PagoDAO.listar();
+
+            DefaultTableModel modelo = (DefaultTableModel) tablaPagos.getModel();
+            modelo.setRowCount(0);
+
+            for (Pago p : pagos) {
+
+                Cliente c = ClienteDAO.buscarXCedula(p.getCedula());
+                Evento ev = EventoDAO.buscarXId(p.getId_evento());
+                System.out.println("Evento tabla: " + ev.getNombre());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                modelo.addRow(new Object[]{
+                    p.getCedula(),
+                    c.getNombre() + " " + c.getApellido(),
+                    String.format("%.2f", p.getMonto()),
+                    p.getFecha().format(formatter),
+                    ev.getNombre()
+                });
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar pagos");
+            System.out.println(e);
+        }
+        dtDesde.setDate(null);
+        dtHasta.setDate(null);
+    }
+
+    private void inicializarFiltro() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaPagos.getModel();
+        sorter = new TableRowSorter<>(modelo);
+        tablaPagos.setRowSorter(sorter);
+        if (e != null) {
+            txtFiltroEvento.setText(e.getNombre());
+            aplicarFiltros();
+        }
+    }
+
+    private void aplicarFiltros() {
+        try {
+            System.out.println("==== APLICANDO FILTROS ====");
+
+            List<RowFilter<Object, Object>> filtros = new ArrayList<>();
+
+            // Nombre
+            String nombre = txtFiltroNombre.getText().trim();
+            System.out.println("Filtro Nombre: " + nombre);
+            if (!nombre.isEmpty()) {
+                filtros.add(RowFilter.regexFilter("(?i)" + nombre, 1));
+            }
+
+            // Cedula
+            String cedula = txtFiltroCedula.getText().trim();
+            System.out.println("Filtro Cedula: " + cedula);
+            if (!cedula.isEmpty()) {
+                filtros.add(RowFilter.regexFilter(cedula, 0));
+            }
+
+            // Evento
+            String evento = txtFiltroEvento.getText().trim();
+            System.out.println("Filtro Evento: " + evento);
+            if (!evento.isEmpty()) {
+                filtros.add(RowFilter.regexFilter("(?i).*" + evento + ".*", 4));
+            }
+
+            // Fecha rango
+            // Fecha rango
+            Date desde = dtDesde.getDate();
+            Date hasta = dtHasta.getDate();
+
+            System.out.println("Desde: " + desde);
+            System.out.println("Hasta: " + hasta);
+
+            if (desde != null && hasta != null) {
+
+                filtros.add(new RowFilter<Object, Object>() {
+                    public boolean include(Entry<?, ?> entry) {
+                        try {
+                            String fechaStr = entry.getStringValue(3);
+                            System.out.println("Fila fecha (string): " + fechaStr);
+
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                            // String -> LocalDate
+                            LocalDate fecha = LocalDate.parse(fechaStr, formatter);
+
+                            // Date -> LocalDate
+                            LocalDate desdeLD = desde.toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate();
+
+                            LocalDate hastaLD = hasta.toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate();
+
+                            System.out.println("Fecha parsed: " + fecha);
+                            System.out.println("Desde LD: " + desdeLD);
+                            System.out.println("Hasta LD: " + hastaLD);
+
+                            boolean resultado = (!fecha.isBefore(desdeLD) && !fecha.isAfter(hastaLD));
+
+                            System.out.println("¿Pasa filtro? " + resultado);
+                            System.out.println("------------------");
+
+                            return resultado;
+
+                        } catch (Exception e) {
+                            System.out.println("Error parseando fecha: " + e.getMessage());
+                            return false;
+                        }
+                    }
+                });
+            }
+
+            System.out.println("Cantidad filtros: " + filtros.size());
+
+            sorter.setRowFilter(RowFilter.andFilter(filtros));
+
+            System.out.println("==== FIN FILTRO ====");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al filtrar");
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -114,15 +355,27 @@ public class desglose_pagos extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new desglose_pagos().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new desglose_pagos(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnVolver;
+    private com.toedter.calendar.JDateChooser dtDesde;
+    private com.toedter.calendar.JDateChooser dtHasta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablaPagos;
+    private javax.swing.JTextField txtFiltroCedula;
+    private javax.swing.JTextField txtFiltroEvento;
+    private javax.swing.JTextField txtFiltroNombre;
     // End of variables declaration//GEN-END:variables
 }

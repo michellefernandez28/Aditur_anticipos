@@ -76,7 +76,7 @@ public class EventoDAO {
         return lista;
     }
 
-    public static Evento buscarPorId(int idEvento) throws IOException {
+    public static Evento buscarXId(int idEvento) throws IOException {
 
         List<Evento> lista = listar();
 

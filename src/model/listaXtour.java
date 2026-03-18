@@ -7,6 +7,7 @@ package model;
 import dao.ClienteDAO;
 import dao.ClienteXEventoDAO;
 import dao.PagoDAO;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,8 +55,8 @@ public class listaXtour extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         btnAgregarNuevo = new javax.swing.JButton();
         btnAgregarAnticipo = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         btnVerPagos = new javax.swing.JButton();
         cbEvento = new javax.swing.JComboBox<>();
         btnVolver = new javax.swing.JButton();
@@ -106,17 +107,19 @@ public class listaXtour extends javax.swing.JFrame {
         btnAgregarAnticipo.addActionListener(this::btnAgregarAnticipoActionPerformed);
         jPanel4.add(btnAgregarAnticipo);
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setText("Editar");
-        jPanel4.add(jButton1);
+        btnEditar.setBackground(new java.awt.Color(255, 255, 255));
+        btnEditar.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        btnEditar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(this::btnEditarActionPerformed);
+        jPanel4.add(btnEditar);
 
-        jButton5.setBackground(new java.awt.Color(255, 255, 255));
-        jButton5.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(0, 0, 0));
-        jButton5.setText("Eliminar");
-        jPanel4.add(jButton5);
+        btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
+        jPanel4.add(btnEliminar);
 
         btnVerPagos.setBackground(new java.awt.Color(255, 255, 255));
         btnVerPagos.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
@@ -230,14 +233,33 @@ public class listaXtour extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarNuevoActionPerformed
 
     private void btnAgregarAnticipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAnticipoActionPerformed
+        int fila = tablaPersonas.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un evento");
+            return;
+        }
+
+        int cedula = Integer.parseInt(tablaPersonas.getValueAt(fila, 1).toString());
+        NumberFormat format = NumberFormat.getInstance();
+        Number number;
+        try {
+            number = format.parse(tablaPersonas.getValueAt(fila, 7).toString());
+        } catch (Exception ex) {
+            System.out.println("Formaro de número incorrecto");
+            System.out.println(ex);
+            number = 0;
+        }
+        double pendiente = number.doubleValue();
+
         dispose();
-        AgregarAnticipo agregaranticipo = new AgregarAnticipo();
+        AgregarAnticipo agregaranticipo = new AgregarAnticipo(e, cedula, pendiente);
         agregaranticipo.setVisible(true);
     }//GEN-LAST:event_btnAgregarAnticipoActionPerformed
 
     private void btnVerPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerPagosActionPerformed
         dispose();
-        desglose_pagos desglose_pagos = new desglose_pagos();
+        desglose_pagos desglose_pagos = new desglose_pagos(e);
         desglose_pagos.setVisible(true);
     }//GEN-LAST:event_btnVerPagosActionPerformed
 
@@ -245,14 +267,76 @@ public class listaXtour extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbEventoActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        int fila = tablaPersonas.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un evento");
+            return;
+        }
+        int cedula = Integer.parseInt(tablaPersonas.getValueAt(fila, 1).toString());
+        try {
+
+            String nombre = tablaPersonas.getValueAt(fila, 0).toString();
+
+            int confirmacion = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Está seguro de eliminar el apartado de " + nombre + "? \n"
+                    + "Esto también borrará los abonos del sistema.",
+                    "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirmacion == JOptionPane.YES_OPTION) {
+
+                ClienteXEventoDAO.eliminar(cedula, e.getIdEvento());
+
+                PagoDAO.eliminar(cedula, e.getIdEvento());
+
+                Cargar(e.getIdEvento());
+                VerDatos();
+
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar");
+            StringBuilder sb = new StringBuilder("Se ha producido una excepción:\n");
+            for (StackTraceElement element : e.getStackTrace()) {
+                sb.append(element.toString()).append("\n");
+            }
+            JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        int fila = tablaPersonas.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un evento");
+            return;
+        }
+        int cedula = Integer.parseInt(tablaPersonas.getValueAt(fila, 1).toString());
+        dispose();
+        editarPersona editarpersona = new editarPersona(e, cedula);
+        editarpersona.setVisible(true);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
     private void Cargar(int idEvento) {
         try {
             // Clientes del evento
-            Clientes = (ArrayList<Cliente>) ClienteDAO.listar(idEvento);
+            Clientes = (ArrayList<Cliente>) ClienteDAO.listarXEvento(idEvento);
+            System.out.println("Clientes");
+            System.out.println(Clientes);
 
             listaCXE = ClienteXEventoDAO.buscarPorEvento(idEvento);
+            System.out.println("ClienteXEvento");
+            System.out.println(listaCXE);
 
             listaPagos = PagoDAO.buscarPorEvento(idEvento);
+            System.out.println("Pagos");
+            System.out.println(listaPagos);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar los participantes");
@@ -261,7 +345,7 @@ public class listaXtour extends javax.swing.JFrame {
             for (StackTraceElement element : e.getStackTrace()) {
                 sb.append(element.toString()).append("\n");
             }
-
+            System.out.println(sb.toString());
             JOptionPane.showMessageDialog(null, sb.toString(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -291,8 +375,11 @@ public class listaXtour extends javax.swing.JFrame {
             int abonos = 0;
             double totalPagado = 0;
             LocalDate fechaMasReciente = null;
-
+            System.out.println("Lista Pagos");
+            System.out.println(listaPagos);
             for (Pago p : listaPagos) {
+
+                System.out.println(p);
                 if (p.getCedula() == c.getCedula()) {
 
                     abonos++;
@@ -303,6 +390,7 @@ public class listaXtour extends javax.swing.JFrame {
                     }
                 }
             }
+            System.out.println(abonos + " " + totalPagado);
 
             String ultimaFecha = (fechaMasReciente != null) ? fechaMasReciente.toString() : "";
 
@@ -360,11 +448,11 @@ public class listaXtour extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarAnticipo;
     private javax.swing.JButton btnAgregarNuevo;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVerPagos;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> cbEvento;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
