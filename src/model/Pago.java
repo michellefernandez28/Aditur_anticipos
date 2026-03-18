@@ -5,6 +5,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import static util.Constantes.SEP;
 
 /**
@@ -20,9 +21,11 @@ public class Pago {
     private int cedula;
     private int id_evento;
 
+    //Empty constructor
     public Pago() {
     }
 
+    //Empty constructor
     public Pago(int id_pago, LocalDate fecha, double monto, int cedula, int id_evento) {
         this.id_pago = id_pago;
         this.fecha = fecha;
@@ -50,6 +53,7 @@ public class Pago {
                 Integer.parseInt(datos[3]),
                 Integer.parseInt(datos[4])
         );
+
     }
 
     public int getId_pago() {

@@ -93,7 +93,7 @@ public class PagoDAO {
 
         for (int i = 1; i < lineas.size(); i++) {
             Pago p = Pago.fromCSV(lineas.get(i));
-            if (p.getCedula() == actualizado.getCedula() && p.getId_evento() == actualizado.getId_evento()) {
+            if (p.getId_pago() == actualizado.getId_pago()) {
                 nuevasLineas.add(actualizado.toCSV());
             } else {
                 nuevasLineas.add(lineas.get(i));

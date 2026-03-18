@@ -87,7 +87,7 @@ public class ClienteXEventoDAO {
         CSVUtility.sobrescribirArchivo(Constantes.ARCHIVO_CLIENTE_EVENTO, nuevasLineas);
     }
 
-    public static void actualizar(Cliente_X_Evento actualizado) throws IOException {
+    public static void actualizar(int cedula, Cliente_X_Evento actualizado) throws IOException {
 
         List<String> lineas = CSVUtility.leerLineas(Constantes.ARCHIVO_CLIENTE_EVENTO);
         List<String> nuevasLineas = new ArrayList<>();
@@ -96,7 +96,7 @@ public class ClienteXEventoDAO {
 
         for (int i = 1; i < lineas.size(); i++) {
             Cliente_X_Evento c = Cliente_X_Evento.fromCSV(lineas.get(i));
-            if (c.getCedula() == actualizado.getCedula() && c.getId_evento() == actualizado.getId_evento()) {
+            if (c.getCedula() == cedula && c.getId_evento() == actualizado.getId_evento()) {
                 nuevasLineas.add(actualizado.toCSV());
             } else {
                 nuevasLineas.add(lineas.get(i));

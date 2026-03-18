@@ -39,7 +39,7 @@ public class ClienteDAO {
         );
     }
 
-    public static List<Cliente> listar(int idEvento) throws IOException {
+    public static List<Cliente> listarXEvento(int idEvento) throws IOException {
 
         List<Cliente> resultado = new ArrayList<>();
 
@@ -92,19 +92,18 @@ public class ClienteDAO {
         );
     }
 
-    public static void actualizar(Cliente actualizado) throws IOException {
+    public static void actualizar(int cedula, Cliente actualizado) throws IOException {
 
         List<String> lineas = CSVUtility.leerLineas(Constantes.ARCHIVO_CLIENTES);
         List<String> nuevasLineas = new ArrayList<>();
 
         nuevasLineas.add(lineas.get(0));
-        int ced = actualizado.getCedula();
 
         for (int i = 1; i < lineas.size(); i++) {
 
             Cliente c = Cliente.fromCSV(lineas.get(i));
 
-            if (c.getCedula() == ced) {
+            if (c.getCedula() == cedula) {
                 nuevasLineas.add(actualizado.toCSV());
             } else {
                 nuevasLineas.add(lineas.get(i));
@@ -120,7 +119,7 @@ public class ClienteDAO {
 
     public static boolean existe(int cedula, int idEvento) throws IOException {
 
-        List<Cliente> lista = listar(idEvento); // asumimos que ya lo tenés
+        List<Cliente> lista = listarXEvento(idEvento);
 
         for (Cliente c : lista) {
             if (c.getCedula() == cedula) {
@@ -129,5 +128,20 @@ public class ClienteDAO {
         }
 
         return false;
+    }
+
+    public static Cliente buscarXCedula(int cedula) throws IOException {
+
+        List<String> lineas = CSVUtility.leerLineas(Constantes.ARCHIVO_CLIENTES);
+
+        for (int i = 1; i < lineas.size(); i++) {
+            Cliente cliente = Cliente.fromCSV(lineas.get(i));
+
+            if (cedula == cliente.getCedula()) {
+                return cliente;
+            }
+        }
+
+        return null; // 🔥 importante
     }
 }

@@ -4,12 +4,12 @@
  */
 package model;
 
+import dao.ClienteXEventoDAO;
 import dao.EventoDAO;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,7 +18,8 @@ import javax.swing.JOptionPane;
  */
 public class ListaTour extends javax.swing.JFrame {
 
-    private ArrayList<Evento> Eventos;
+    private List<Evento> Eventos;
+    private List<Cliente_X_Evento> listaCXE;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaTour.class.getName());
 
@@ -267,7 +268,7 @@ public class ListaTour extends javax.swing.JFrame {
         btnCerrarSesion.setForeground(new java.awt.Color(255, 255, 255));
         btnCerrarSesion.setText("Cerrar Sesión");
         btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
-        jPanel1.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 670, -1, -1));
+        jPanel1.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 670, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -392,7 +393,8 @@ public class ListaTour extends javax.swing.JFrame {
 
     private void Cargar() {
         try {
-            Eventos = (ArrayList<Evento>) EventoDAO.listar();
+            Eventos = EventoDAO.listar();
+            listaCXE = ClienteXEventoDAO.listar();
             System.out.println(Eventos);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar el Evento");
@@ -409,14 +411,25 @@ public class ListaTour extends javax.swing.JFrame {
 
         String matriz[][] = new String[Eventos.size()][8];
         Evento e;
+
         for (int i = 0; i < Eventos.size(); i++) {
+
             e = Eventos.get(i);
+
+            int totalPersonas = 0;
+
+            for (Cliente_X_Evento cxe : listaCXE) {
+                if (cxe.getId_evento() == e.getIdEvento()) {
+                    totalPersonas += cxe.getCant_personas();
+                }
+            }
+
             matriz[i][0] = Integer.toString(e.getIdEvento());
             matriz[i][1] = e.getNombre();
             matriz[i][2] = e.getFecha().toString();
             matriz[i][3] = Integer.toString(e.getCantidadParticipantes());
             matriz[i][4] = Double.toString(e.getMontoPersona());
-            matriz[i][5] = "0";
+            matriz[i][5] = Integer.toString(totalPersonas);
             matriz[i][6] = Integer.toString(e.getCantDias());
             matriz[i][7] = e.getDetalles();
 
@@ -446,6 +459,7 @@ public class ListaTour extends javax.swing.JFrame {
 
                 listaXtour ventana = new listaXtour(e);
                 ventana.setVisible(true);
+                dispose();
                 System.out.println("Se abrió el evento correctamente");
 
             } catch (Exception e) {
