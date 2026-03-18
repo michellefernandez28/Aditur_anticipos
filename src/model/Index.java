@@ -37,7 +37,7 @@ public class Index {
         }
 
         // Iniciar interfaz
-        inicioSesion iniciosesion = new inicioSesion();
+        InicioSesion iniciosesion = new InicioSesion();
         iniciosesion.setVisible(true);
     }
 

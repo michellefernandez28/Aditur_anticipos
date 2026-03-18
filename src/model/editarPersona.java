@@ -18,17 +18,17 @@ import javax.swing.JOptionPane;
  *
  * @author miche
  */
-public class editarPersona extends javax.swing.JFrame {
+public class EditarPersona extends javax.swing.JFrame {
 
     private Evento e;
     private int cedula;
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(editarPersona.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EditarPersona.class.getName());
 
     /**
      * Creates new form agregarAnticipo
      */
-    public editarPersona(Evento e, int cedula) {
+    public EditarPersona(Evento e, int cedula) {
         initComponents();
         spiTiquetes.getEditor().getComponent(0).setBackground(new Color(255, 255, 255));
         spiTiquetes.getEditor().getComponent(0).setForeground(new Color(0, 0, 0));
@@ -245,7 +245,7 @@ public class editarPersona extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
-        listaXtour listaxtour = new listaXtour(e);
+        Lista_X_Tour listaxtour = new Lista_X_Tour(e);
         listaxtour.setVisible(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -341,7 +341,7 @@ public class editarPersona extends javax.swing.JFrame {
 
             // ===== 8. Cerrar y volver =====
             dispose();
-            listaXtour listaxtour = new listaXtour(e);
+            Lista_X_Tour listaxtour = new Lista_X_Tour(e);
             listaxtour.setVisible(true);
 
         } catch (Exception e) {
@@ -410,7 +410,7 @@ public class editarPersona extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new editarPersona(null, 0
+        java.awt.EventQueue.invokeLater(() -> new EditarPersona(null, 0
         ).setVisible(true)
         );
     }

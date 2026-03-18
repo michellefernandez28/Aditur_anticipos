@@ -387,7 +387,7 @@ public class ListaTour extends javax.swing.JFrame {
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         dispose();
-        inicioSesion iniciosesion = new inicioSesion();
+        InicioSesion iniciosesion = new InicioSesion();
         iniciosesion.setVisible(true);
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
@@ -457,7 +457,7 @@ public class ListaTour extends javax.swing.JFrame {
 
                 Evento e = Eventos.get(fila);
 
-                listaXtour ventana = new listaXtour(e);
+                Lista_X_Tour ventana = new Lista_X_Tour(e);
                 ventana.setVisible(true);
                 dispose();
                 System.out.println("Se abrió el evento correctamente");
