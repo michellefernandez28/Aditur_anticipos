@@ -22,16 +22,16 @@ import javax.swing.table.TableRowSorter;
  *
  * @author miche
  */
-public class desglose_pagos extends javax.swing.JFrame {
+public class DesglosePagos extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(desglose_pagos.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DesglosePagos.class.getName());
     private TableRowSorter<DefaultTableModel> sorter;
     Evento e;
 
     /**
      * Creates new form desglose_pagos
      */
-    public desglose_pagos(Evento evento) {
+    public DesglosePagos(Evento evento) {
         initComponents();
         ((javax.swing.JTextField) dtDesde.getDateEditor().getUiComponent())
                 .setBackground(new java.awt.Color(204, 204, 204));
@@ -99,14 +99,14 @@ public class desglose_pagos extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablaPagos);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 990, -1));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 900, 330));
 
         btnVolver.setBackground(new java.awt.Color(0, 0, 204));
         btnVolver.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         btnVolver.setForeground(new java.awt.Color(255, 255, 255));
         btnVolver.setText("Volver");
         btnVolver.addActionListener(this::btnVolverActionPerformed);
-        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 640, -1, -1));
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 640, -1, -1));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
@@ -192,7 +192,7 @@ public class desglose_pagos extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         dispose();
-        listaXtour listaxtour = new listaXtour(e);
+        Lista_X_Tour listaxtour = new Lista_X_Tour(e);
         listaxtour.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
@@ -355,7 +355,7 @@ public class desglose_pagos extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new desglose_pagos(null).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new DesglosePagos(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

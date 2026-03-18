@@ -221,7 +221,7 @@ public class AgregarAnticipo extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
-        listaXtour listaxtour = new listaXtour(e);
+        Lista_X_Tour listaxtour = new Lista_X_Tour(e);
         listaxtour.setVisible(true);
 
     }//GEN-LAST:event_btnCancelarActionPerformed
@@ -268,7 +268,7 @@ public class AgregarAnticipo extends javax.swing.JFrame {
 
             // Regresar
             dispose();
-            listaXtour lista = new listaXtour(e);
+            Lista_X_Tour lista = new Lista_X_Tour(e);
             lista.setVisible(true);
 
         } catch (NumberFormatException ex) {

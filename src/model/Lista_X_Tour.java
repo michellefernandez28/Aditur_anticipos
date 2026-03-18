@@ -6,37 +6,40 @@ package model;
 
 import dao.ClienteDAO;
 import dao.ClienteXEventoDAO;
+import dao.EventoDAO;
 import dao.PagoDAO;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author miche
  */
-public class listaXtour extends javax.swing.JFrame {
+public class Lista_X_Tour extends javax.swing.JFrame {
 
     private ArrayList<Cliente> Clientes;
     private List<Cliente_X_Evento> listaCXE;
     private List<Pago> listaPagos;
     private Evento e;
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(listaXtour.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Lista_X_Tour.class.getName());
 
     /**
      * Creates new form listaXtour
      */
-    public listaXtour(Evento e) {
+    public Lista_X_Tour(Evento e) {
         Clientes = new ArrayList<Cliente>();
         initComponents();
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        lbEvento.setText(e.getNombre());
+
         this.e = e;
         Cargar(e.getIdEvento());
+        cargarEventos();
         VerDatos();
     }
 
@@ -62,9 +65,9 @@ public class listaXtour extends javax.swing.JFrame {
         btnVolver = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtCapacidad = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtGanancias = new javax.swing.JTextField();
         lbEvento = new javax.swing.JLabel();
         listadopasajeros1 = new javax.swing.JLabel();
         lbleclipse = new javax.swing.JLabel();
@@ -131,7 +134,8 @@ public class listaXtour extends javax.swing.JFrame {
         cbEvento.setBackground(new java.awt.Color(255, 255, 255));
         cbEvento.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         cbEvento.setForeground(new java.awt.Color(0, 0, 0));
-        cbEvento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Evento" }));
+        cbEvento.setSelectedIndex(-1);
+        cbEvento.addItemListener(this::cbEventoItemStateChanged);
         cbEvento.addActionListener(this::cbEventoActionPerformed);
         jPanel4.add(cbEvento);
 
@@ -150,16 +154,24 @@ public class listaXtour extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Capacidad:");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        jTextField1.setEditable(false);
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        txtCapacidad.setEditable(false);
+        txtCapacidad.setBackground(new java.awt.Color(255, 255, 255));
+        txtCapacidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCapacidad.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
+        txtCapacidad.setFocusable(false);
 
         jLabel2.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Costo total:");
+        jLabel2.setText("  Ganancias: ");
+        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        jTextField2.setEditable(false);
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
+        txtGanancias.setEditable(false);
+        txtGanancias.setBackground(new java.awt.Color(255, 255, 255));
+        txtGanancias.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtGanancias.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
+        txtGanancias.setFocusable(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -169,11 +181,12 @@ public class listaXtour extends javax.swing.JFrame {
                 .addGap(9, 9, 9)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addComponent(txtCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addGap(0, 0, 0)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,20 +194,23 @@ public class listaXtour extends javax.swing.JFrame {
                 .addGap(3, 3, 3)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCapacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1))
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)))
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 570, 410, 40));
+        jLabel2.getAccessibleContext().setAccessibleName("Ganancias:");
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 570, 590, 40));
 
         lbEvento.setBackground(new java.awt.Color(0, 0, 0));
         lbEvento.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
         lbEvento.setForeground(new java.awt.Color(0, 0, 0));
+        lbEvento.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbEvento.setText(".");
         lbEvento.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jPanel1.add(lbEvento, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 100, -1, -1));
+        jPanel1.add(lbEvento, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 90, -1, -1));
 
         listadopasajeros1.setBackground(new java.awt.Color(0, 0, 0));
         listadopasajeros1.setFont(new java.awt.Font("Arial Black", 0, 48)); // NOI18N
@@ -228,7 +244,7 @@ public class listaXtour extends javax.swing.JFrame {
 
     private void btnAgregarNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarNuevoActionPerformed
         dispose();
-        agregarPersona agregarpersona = new agregarPersona(e);
+        AgregarPersona agregarpersona = new AgregarPersona(e);
         agregarpersona.setVisible(true);
     }//GEN-LAST:event_btnAgregarNuevoActionPerformed
 
@@ -246,7 +262,7 @@ public class listaXtour extends javax.swing.JFrame {
         try {
             number = format.parse(tablaPersonas.getValueAt(fila, 7).toString());
         } catch (Exception ex) {
-            System.out.println("Formaro de número incorrecto");
+            System.out.println("Formato de número incorrecto");
             System.out.println(ex);
             number = 0;
         }
@@ -259,7 +275,7 @@ public class listaXtour extends javax.swing.JFrame {
 
     private void btnVerPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerPagosActionPerformed
         dispose();
-        desglose_pagos desglose_pagos = new desglose_pagos(e);
+        DesglosePagos desglose_pagos = new DesglosePagos(e);
         desglose_pagos.setVisible(true);
     }//GEN-LAST:event_btnVerPagosActionPerformed
 
@@ -319,11 +335,19 @@ public class listaXtour extends javax.swing.JFrame {
         }
         int cedula = Integer.parseInt(tablaPersonas.getValueAt(fila, 1).toString());
         dispose();
-        editarPersona editarpersona = new editarPersona(e, cedula);
+        EditarPersona editarpersona = new EditarPersona(e, cedula);
         editarpersona.setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void cbEventoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEventoItemStateChanged
+        Evento seleccionado = (Evento) cbEvento.getSelectedItem();
+        this.e = seleccionado;
+        Cargar(e.getIdEvento());
+        VerDatos();
+    }//GEN-LAST:event_cbEventoItemStateChanged
+
     private void Cargar(int idEvento) {
+        lbEvento.setText(e.getNombre());
         try {
             // Clientes del evento
             Clientes = (ArrayList<Cliente>) ClienteDAO.listarXEvento(idEvento);
@@ -418,6 +442,46 @@ public class listaXtour extends javax.swing.JFrame {
                 return false;
             }
         });
+        int totalPersonas = 0;
+        for (Cliente_X_Evento cxe : listaCXE) {
+            totalPersonas += cxe.getCant_personas();
+        }
+        txtCapacidad.setText(totalPersonas + " / " + e.getCantidadParticipantes());
+
+        double gananciaEstimada = e.getCantidadParticipantes() * e.getMontoPersona();
+        double ganaciaReal = 0;
+        for (Pago p : listaPagos) {
+            ganaciaReal += p.getMonto();
+
+        }
+        txtGanancias.setText("₡" + ganaciaReal + " / ₡" + gananciaEstimada);
+    }
+
+    private void cargarEventos() {
+        try {
+            List<Evento> lista = EventoDAO.listar();
+
+            DefaultComboBoxModel<Evento> modelo = new DefaultComboBoxModel<>();
+
+            for (Evento evento : lista) {
+                modelo.addElement(evento);
+            }
+
+            cbEvento.setModel(modelo);
+
+            // Auto-seleccionar el evento actual
+            for (int i = 0; i < cbEvento.getItemCount(); i++) {
+                Evento item = cbEvento.getItemAt(i);
+
+                if (item.getIdEvento() == e.getIdEvento()) {
+                    cbEvento.setSelectedIndex(i);
+                    break;
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -442,7 +506,7 @@ public class listaXtour extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new listaXtour(null).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Lista_X_Tour(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -452,18 +516,18 @@ public class listaXtour extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVerPagos;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JComboBox<String> cbEvento;
+    private javax.swing.JComboBox<Evento> cbEvento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lbEvento;
     private javax.swing.JLabel lbleclipse;
     private javax.swing.JLabel listadopasajeros1;
     private javax.swing.JTable tablaPersonas;
+    private javax.swing.JTextField txtCapacidad;
+    private javax.swing.JTextField txtGanancias;
     // End of variables declaration//GEN-END:variables
 }

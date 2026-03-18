@@ -18,16 +18,16 @@ import javax.swing.JOptionPane;
  *
  * @author miche
  */
-public class agregarPersona extends javax.swing.JFrame {
+public class AgregarPersona extends javax.swing.JFrame {
 
     private Evento e;
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(agregarPersona.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AgregarPersona.class.getName());
 
     /**
      * Creates new form agregarAnticipo
      */
-    public agregarPersona(Evento e) {
+    public AgregarPersona(Evento e) {
         initComponents();
         spiTiquetes.getEditor().getComponent(0).setBackground(new Color(255, 255, 255));
         spiTiquetes.getEditor().getComponent(0).setForeground(new Color(0, 0, 0));
@@ -265,7 +265,7 @@ public class agregarPersona extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         dispose();
-        listaXtour listaxtour = new listaXtour(e);
+        Lista_X_Tour listaxtour = new Lista_X_Tour(e);
         listaxtour.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
@@ -388,7 +388,7 @@ public class agregarPersona extends javax.swing.JFrame {
 
             // ===== 9. Cerrar y volver =====
             dispose();
-            listaXtour listaxtour = new listaXtour(e);
+            Lista_X_Tour listaxtour = new Lista_X_Tour(e);
             listaxtour.setVisible(true);
 
         } catch (NumberFormatException ex) {
@@ -459,7 +459,7 @@ public class agregarPersona extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new agregarPersona(null
+        java.awt.EventQueue.invokeLater(() -> new AgregarPersona(null
         ).setVisible(true)
         );
     }
