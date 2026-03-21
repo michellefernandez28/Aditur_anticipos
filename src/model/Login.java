@@ -6,22 +6,22 @@ package model;
 
 public class Login {
 
-    // datos usuario y contra
+    // user data and password
     private final String usuarioCorrecto = "Admin01";
     private String contraseñaCorrecta = "Admin@1234";
 
     public boolean validarLogin(String usuario, String contraseña){
 
-        // quitar espacios al inicio y final
+        // remove spaces at the beginning and end
         usuario = usuario.trim();
         contraseña = contraseña.trim();
 
-        // validar campos vacíos
+        // validate empty fields
         if(usuario.isEmpty() || contraseña.isEmpty()){
             return false;
         }
 
-        // comparar con los datos usu y contra
+        // Compare the data with the username and password
         return usuario.equals(usuarioCorrecto) && contraseña.equals(contraseñaCorrecta);
 
     }
