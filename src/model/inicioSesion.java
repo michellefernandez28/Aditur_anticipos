@@ -130,9 +130,6 @@ public class InicioSesion extends javax.swing.JFrame {
             listatour.setVisible(true);
         } else {
             lblMensaje.setText("Usuario o contraseña incorrectos.");
-            dispose();
-            ListaTour listatour = new ListaTour();
-            listatour.setVisible(true);
         }
 
     }//GEN-LAST:event_btnIngresarActionPerformed
