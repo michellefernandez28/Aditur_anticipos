@@ -325,7 +325,7 @@ public class AgregarPersona extends javax.swing.JFrame {
                 return;
             }
 
-            // ===== 2. Separar nombre y apellido =====
+            // ===== 2. Separar nombre y apellidos =====
             String nombre;
             String apellidos;
 
