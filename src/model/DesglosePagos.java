@@ -284,6 +284,8 @@ public class DesglosePagos extends javax.swing.JFrame {
 
                 filtros.add(new RowFilter<Object, Object>() {
                     public boolean include(Entry<?, ?> entry) {
+                        //<any model, any identifier>
+                        //=Just the row
                         try {
                             String fechaStr = entry.getStringValue(3);
                             System.out.println("Fila fecha (string): " + fechaStr);

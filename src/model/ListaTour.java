@@ -104,6 +104,11 @@ public class ListaTour extends javax.swing.JFrame {
         });
         tablaViajes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tablaViajes.getTableHeader().setReorderingAllowed(false);
+        tablaViajes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                tablaViajesMouseMoved(evt);
+            }
+        });
         tablaViajes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablaViajesMouseClicked(evt);
@@ -390,6 +395,28 @@ public class ListaTour extends javax.swing.JFrame {
         InicioSesion iniciosesion = new InicioSesion();
         iniciosesion.setVisible(true);
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void tablaViajesMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaViajesMouseMoved
+        // TODO add your handling code here:
+        int fila = tablaViajes.rowAtPoint(evt.getPoint());
+        int columna = tablaViajes.columnAtPoint(evt.getPoint());
+
+        if (fila != -1 && columna == 7) { // "Detalles"
+            Object valor = tablaViajes.getValueAt(fila, columna);
+
+            if (valor != null) {
+                tablaViajes.setToolTipText(
+                        "<html><body style='width: 250px'>"
+                        + valor.toString()
+                        + "</body></html>"
+                );
+            } else {
+                tablaViajes.setToolTipText(null);
+            }
+        } else {
+            tablaViajes.setToolTipText(null);
+        }
+    }//GEN-LAST:event_tablaViajesMouseMoved
 
     private void Cargar() {
         try {
