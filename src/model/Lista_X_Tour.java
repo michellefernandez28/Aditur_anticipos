@@ -252,7 +252,7 @@ public class Lista_X_Tour extends javax.swing.JFrame {
         int fila = tablaPersonas.getSelectedRow();
 
         if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un evento");
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario");
             return;
         }
 
@@ -288,7 +288,7 @@ public class Lista_X_Tour extends javax.swing.JFrame {
         int fila = tablaPersonas.getSelectedRow();
 
         if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un evento");
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario");
             return;
         }
         int cedula = Integer.parseInt(tablaPersonas.getValueAt(fila, 1).toString());
@@ -330,7 +330,7 @@ public class Lista_X_Tour extends javax.swing.JFrame {
         int fila = tablaPersonas.getSelectedRow();
 
         if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un evento");
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario");
             return;
         }
         int cedula = Integer.parseInt(tablaPersonas.getValueAt(fila, 1).toString());
